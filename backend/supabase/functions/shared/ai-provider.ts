@@ -57,7 +57,7 @@ export class AIProviderService {
       case "groq":
         this.provider = "openai_compatible";
         this.apiKey = Deno.env.get("GROQ_API_KEY") || "";
-        this.model = Deno.env.get("GROQ_MODEL") || "llama-3.3-70b-versatile";
+        this.model = Deno.env.get("GROQ_MODEL") || "openai/gpt-oss-120b";
         this.baseUrl = "https://api.groq.com/openai/v1";
         break;
 

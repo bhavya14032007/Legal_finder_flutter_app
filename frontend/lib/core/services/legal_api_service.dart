@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/backend_models.dart';
@@ -41,13 +42,72 @@ class LegalApiService {
       }
     }
 
-    // Local fallback reasoning engine
+    // Direct live AI response using verified Groq LLM (openai/gpt-oss-120b)
+    final directAiResponse = await _callDirectGroqAi(message, language);
+    if (directAiResponse != null) {
+      return {
+        'message': directAiResponse,
+        'statutes': _extractFallbackStatutes(message),
+        'session_id': sessionId ?? 'live-session-${DateTime.now().millisecondsSinceEpoch}',
+        'disclaimer': 'Legal Helper provides statutory information, not formal attorney representation.',
+      };
+    }
+
+    // Enhanced local fallback reasoning engine
     return {
       'message': _generateFallbackAdvisorResponse(message),
       'statutes': _extractFallbackStatutes(message),
       'session_id': sessionId ?? 'local-session-${DateTime.now().millisecondsSinceEpoch}',
-      'disclaimer': 'Legal Helper provides statutory information, not attorney representation.',
+      'disclaimer': 'Legal Helper provides statutory information, not formal attorney representation.',
     };
+  }
+
+  static const String _groqKey = String.fromEnvironment('GROQ_API_KEY');
+
+  static Future<String?> _callDirectGroqAi(String prompt, String language) async {
+    if (_groqKey.isEmpty) return null;
+    try {
+      final dio = Dio();
+      final res = await dio.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $_groqKey',
+            'Content-Type': 'application/json',
+            'User-Agent': 'LegalHelperApp/1.0',
+          },
+          sendTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 25),
+        ),
+        data: {
+          'model': 'openai/gpt-oss-120b',
+          'messages': [
+            {
+              'role': 'system',
+              'content': 'You are the Senior Legal AI Advisor for Legal Helper. '
+                  'Provide authoritative, clear, and well-structured legal guidance primarily under Indian law and common law principles. '
+                  'Format your response using Markdown headings, bullet points, relevant statutory provisions, and actionable procedural next steps. '
+                  'Target Output Language: ${language == "hi" ? "Hindi (हिंदी)" : "English"}. '
+                  'Do NOT give repetitive generic answers. Tailor each response specifically to the factual nuances of the user query.',
+            },
+            {'role': 'user', 'content': prompt},
+          ],
+        },
+      );
+
+      if (res.statusCode == 200 && res.data is Map<String, dynamic>) {
+        final choices = res.data['choices'] as List<dynamic>?;
+        if (choices != null && choices.isNotEmpty) {
+          final content = choices[0]['message']?['content']?.toString();
+          if (content != null && content.trim().isNotEmpty) {
+            return content.trim();
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('[LegalApiService] Direct Groq query failed: $e');
+    }
+    return null;
   }
 
   // ===========================================================================
@@ -449,22 +509,108 @@ class LegalApiService {
   // ===========================================================================
   static String _generateFallbackAdvisorResponse(String query) {
     final q = query.toLowerCase();
-    if (q.contains('rent') || q.contains('tenant') || q.contains('lease') || q.contains('evict')) {
-      return 'Regarding Tenancy & Leasehold Rights:\n\n'
-          '1. **Notice Requirement**: Under the Transfer of Property Act (Section 106), residential leases require a mandatory 15-day written notice before eviction proceedings, unless the contract stipulates a longer period.\n'
-          '2. **Security Deposit**: Unlawful withholding can be contested before the local Rent Authority or Small Causes Court.\n'
-          '3. **Immediate Steps**: Collate bank payment receipts and the registered/notarized agreement.';
+
+    // 1. Tenancy / Leasehold
+    if (q.contains('rent') || q.contains('tenant') || q.contains('lease') || q.contains('evict') || q.contains('landlord')) {
+      return '''### Tenancy & Leasehold Legal Rights Analysis
+
+#### 1. Statutory Framework
+- **Transfer of Property Act, 1882 (Section 106)**: Prescribes mandatory written notice requirements (minimum 15 days for residential premises) before any legal eviction proceedings.
+- **Model Tenancy Act / State Rent Control Acts**: Prohibit forcible dispossession, utility disconnection, or locking of premises without due process through the designated Rent Authority.
+
+#### 2. Key Protections & Obligations
+- **Security Deposit**: Arbitrary forfeiture is legally actionable. The landlord may only deduct verified repair damages substantiated by receipts.
+- **Lock-in Periods**: Premature termination during a lock-in period must follow the agreed dispute cure notice clause.
+
+#### 3. Recommended Immediate Actions
+1. Assemble all bank transaction slips, rent receipts, and the signed lease deed.
+2. If threatened with unilateral eviction, serve a formal **Advocate Legal Notice** to maintain the status quo.
+3. In case of coercive harassment, lodge an injunctive relief petition before the competent civil court.''';
     }
-    if (q.contains('cheque') || q.contains('bounce') || q.contains('138') || q.contains('dishonour')) {
-      return 'Regarding Cheque Dishonour (Section 138, NI Act):\n\n'
-          '1. **Notice Period**: Statutory notice must be dispatched within 30 days of receiving the bank memo.\n'
-          '2. **Cure Timeline**: The drawer has 15 days from notice receipt to pay the dues.\n'
-          '3. **Court Filing**: If unpaid, a formal complaint must be instituted within 1 month before the Judicial Magistrate.';
+
+    // 2. Cheque Dishonour / Section 138
+    if (q.contains('cheque') || q.contains('bounce') || q.contains('138') || q.contains('dishonour') || q.contains('drawer')) {
+      return '''### Legal Analysis: Cheque Dishonour (Section 138, NI Act)
+
+#### 1. Statutory Requirements
+- **Demand Notice Period**: A formal legal demand notice must be dispatched within **30 days** of receiving the bank memo of dishonour.
+- **Cure Period**: The drawer is legally granted **15 days** from receipt of notice to make payment.
+- **Limitation for Court Complaint**: If payment is not tendered within 15 days, a criminal complaint under Section 138 must be instituted within **1 month** before the Judicial Magistrate.
+
+#### 2. Penal Provisions
+- Punishment: Imprisonment extending up to **2 years**, or fine up to **twice the cheque amount**, or both.
+
+#### 3. Step-by-Step Action Plan
+1. Preserve the original dishonoured cheque along with the original bank Return Memo.
+2. Issue a statutory demand notice via Registered Post / Speed Post with postal tracking acknowledgment.
+3. If unpaid after 15 days, engage counsel to lodge the complaint under Section 142 of the Negotiable Instruments Act.''';
     }
-    return 'Based on statutory legal principles:\n\n'
-        '1. **Legal Categorization**: This matter involves actionable contractual and civil rights.\n'
-        '2. **Procedural Pre-requisites**: It is advisable to issue a formal Legal Notice before filing in court.\n'
-        '3. **Documentation**: Secure all contracts, invoices, email correspondence, and bank receipts.';
+
+    // 3. Consumer Dispute / Defective Good / Refund
+    if (q.contains('consumer') || q.contains('refund') || q.contains('defect') || q.contains('warranty') || q.contains('amazon') || q.contains('flipkart') || q.contains('service deficiency')) {
+      return '''### Consumer Protection & Deficiency of Service Analysis
+
+#### 1. Governing Law
+- **Consumer Protection Act, 2019 (Section 2(11) & Section 35)**: Protects consumers against unfair trade practices, misleading advertisements, and deficiency in services.
+
+#### 2. Reliefs Available
+- Full refund of consideration paid with statutory interest.
+- Replacement or removal of product defect.
+- Additional punitive compensation for mental agony, harassment, and legal litigation costs.
+
+#### 3. Recommended Remedial Course
+1. File an official grievance on the **National Consumer Helpline (NCH)** via portal (consumerhelpline.gov.in) or call 1915.
+2. Issue an informal formal demand notice setting a 7-day compliance window.
+3. Institute an e-complaint on the **e-Daakhil** portal (edaakhil.nic.in) before the District Consumer Commission.''';
+    }
+
+    // 4. Cyber Fraud / Financial Scam / Phishing
+    if (q.contains('cyber') || q.contains('fraud') || q.contains('scam') || q.contains('upi') || q.contains('otp') || q.contains('hacked') || q.contains('blackmail')) {
+      return '''### Urgent Cyber Crime & Fraud Redressal Roadmap
+
+#### 1. Critical Emergency Actions (Within First 2 Hours)
+- **Call National Cyber Helpline 1930**: Request an immediate transaction freeze on the beneficiary account before funds are routed.
+- **Lodge Formal Complaint**: Submit the complaint with transaction UTR numbers and screenshots on the **National Cyber Crime Reporting Portal** (cybercrime.gov.in).
+- **Intimate Your Bank**: Submit a written dispute claim to your bank under the RBI Zero Liability Circular.
+
+#### 2. Statutory Provisions
+- **Information Technology Act, 2000 (Section 43 & Section 66D)**: Penalizes identity theft and financial cheating by impersonation with up to 3 years imprisonment and fine.
+- **Bharatiya Nyaya Sanhita, 2023 / IPC**: Governs criminal breach of trust and cheating.''';
+    }
+
+    // 5. Employment / Termination / Salary
+    if (q.contains('salary') || q.contains('unpaid') || q.contains('fired') || q.contains('termination') || q.contains('employer') || q.contains('employee') || q.contains('pf')) {
+      return '''### Employment Law & Workplace Rights Overview
+
+#### 1. Statutory Safeguards
+- **Payment of Wages Act & Industrial Relations Code**: Employers are obligated to settle all earned wages and contractual dues upon separation.
+- **Severance & Notice Pay**: Arbitrary summary dismissal without adhering to the contractual notice period entitles the employee to salary in lieu of notice.
+
+#### 2. Action Steps
+1. Collate employment offer letters, payslips, appraisal emails, and official resignation/termination communications.
+2. Issue a formal demand letter to the HR and Legal department requesting full and final settlement within 15 days.
+3. If unpaid, file a complaint before the jurisdictional **Labour Commissioner** or file a civil recovery suit.''';
+    }
+
+    // 6. General / Comprehensive Legal Consultation
+    return '''### Legal Consultation & Statutory Roadmap
+
+#### 1. Legal Classification & Merits
+The issue you raised involves actionable legal rights governed under civil and statutory frameworks. A structured approach is essential to preserve your claims and prevent procedural forfeiture.
+
+#### 2. Key Statutory Principles
+- **Contractual Adherence**: Rights and reciprocal obligations established by documented agreements are enforceable under governing law.
+- **Pre-Litigation Requirements**: Courts strongly encourage serving a formal **Advocate Legal Notice** to clarify the legal dispute and attempt resolution before litigation.
+
+#### 3. Evidentiary Checklist
+- Retain all primary records: contracts, written agreements, and signed receipts.
+- Maintain a chronological ledger of communications (emails, letters, call logs).
+- Secure bank account statements or proof of monetary consideration where financial claims are involved.
+
+#### 4. Next Recommended Steps
+1. Issue a registered Legal Notice articulating facts, damages, and demanding remediation within a 15-day cure window.
+2. In case of commercial or civil disputes, evaluate pre-institution mediation for cost-effective resolution.
+3. If necessary, consult an empanelled advocate or approach the District Legal Services Authority (DLSA) for guidance.''';
   }
 
   static List<String> _extractFallbackStatutes(String query) {
