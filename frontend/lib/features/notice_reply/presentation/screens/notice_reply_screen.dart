@@ -45,13 +45,13 @@ class _NoticeReplyScreenState extends ConsumerState<NoticeReplyScreen> {
 
   Future<void> _pickNoticeFile() async {
     try {
-      final res = await FilePicker.platform.pickFiles(
+      final files = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'docx', 'txt', 'png', 'jpg'],
       );
-      if (res != null && res.files.isNotEmpty) {
+      if (files.isNotEmpty) {
         setState(() {
-          _attachedNoticeName = res.files.first.name;
+          _attachedNoticeName = files.first.name;
           _noticeTextController.text =
               'LEGAL NOTICE FOR DEMAND OF OUTSTANDING DUES UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT. TAKE NOTICE that cheque no. 091234 drawn on HDFC Bank was returned unpaid with remarks "Funds Insufficient". You are hereby called upon to pay \$4,500 within 15 days...';
         });

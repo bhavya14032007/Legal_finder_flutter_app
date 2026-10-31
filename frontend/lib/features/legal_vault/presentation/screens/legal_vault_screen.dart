@@ -80,19 +80,20 @@ class _LegalVaultScreenState extends State<LegalVaultScreen> {
 
   Future<void> _uploadDocument() async {
     try {
-      final res = await FilePicker.platform.pickFiles(
+      final files = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc', 'docx', 'png', 'jpg'],
       );
-      if (res != null && res.files.isNotEmpty) {
-        final f = res.files.first;
+      if (files.isNotEmpty) {
+        final f = files.first;
+        final bytes = f.lengthSync() ?? (1024 * 512);
         setState(() {
           _vaultDocs.insert(
             0,
             VaultDocument(
               id: DateTime.now().millisecondsSinceEpoch.toString(),
               name: f.name,
-              size: '${(f.size / (1024 * 1024)).toStringAsFixed(1)} MB',
+              size: '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB',
               date: 'Just now',
               category: _selectedCategory ?? VaultCategory.contracts,
             ),

@@ -44,14 +44,14 @@ class _DocumentSimplifierScreenState extends ConsumerState<DocumentSimplifierScr
 
   Future<void> _pickDocument() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final files = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'docx', 'doc', 'txt'],
       );
 
-      if (result != null && result.files.isNotEmpty) {
+      if (files.isNotEmpty) {
         setState(() {
-          _pickedFileName = result.files.first.name;
+          _pickedFileName = files.first.name;
           _textController.text =
               '[Document: $_pickedFileName]\nWHEREAS the Licensor is the sole absolute owner of the premises, AND WHEREAS the Licensee is desirous of occupying the premises on a temporary leave and license basis for 11 months subject to non-refundable caution deposit and indemnification in case of premature termination...';
         });
