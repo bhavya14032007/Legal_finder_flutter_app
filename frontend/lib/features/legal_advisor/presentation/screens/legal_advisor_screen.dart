@@ -286,13 +286,7 @@ class _LegalAdvisorScreenState extends ConsumerState<LegalAdvisorScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SelectableText(
-                    msg.content,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: isUser ? Colors.white : context.colors.onSurface,
-                      height: 1.45,
-                    ),
-                  ),
+                  _buildFormattedMessage(msg.content, isUser, context),
                   if (msg.legalCitations != null && msg.legalCitations!.isNotEmpty) ...[
                     AppSpacing.verticalSpaceSm,
                     const Divider(height: 12),
@@ -370,6 +364,57 @@ class _LegalAdvisorScreenState extends ConsumerState<LegalAdvisorScreen> {
           ],
         ],
       ),
+    );
+  }
+
+  Widget _buildFormattedMessage(String text, bool isUser, BuildContext context) {
+    final baseStyle = AppTypography.bodyMedium.copyWith(
+      color: isUser ? Colors.white : context.colors.onSurface,
+      height: 1.45,
+    );
+    final boldStyle = baseStyle.copyWith(
+      fontWeight: FontWeight.w700,
+      color: isUser ? Colors.white : (context.colors.primary.withValues(alpha: 0.95)),
+    );
+
+    // Strip any leading hashtag markers if any exist
+    final cleanText = text.replaceAll(RegExp(r'^\s*#{1,6}\s*', multiLine: true), '');
+
+    // Split on **bold** segments
+    final regex = RegExp(r'\*\*(.*?)\*\*');
+    final matches = regex.allMatches(cleanText);
+
+    if (matches.isEmpty) {
+      return SelectableText(cleanText, style: baseStyle);
+    }
+
+    final spans = <TextSpan>[];
+    int lastMatchEnd = 0;
+
+    for (final match in matches) {
+      if (match.start > lastMatchEnd) {
+        spans.add(TextSpan(
+          text: cleanText.substring(lastMatchEnd, match.start),
+          style: baseStyle,
+        ));
+      }
+      spans.add(TextSpan(
+        text: match.group(1),
+        style: boldStyle,
+      ));
+      lastMatchEnd = match.end;
+    }
+
+    if (lastMatchEnd < cleanText.length) {
+      spans.add(TextSpan(
+        text: cleanText.substring(lastMatchEnd),
+        style: baseStyle,
+      ));
+    }
+
+    return SelectableText.rich(
+      TextSpan(children: spans),
+      style: baseStyle,
     );
   }
 }

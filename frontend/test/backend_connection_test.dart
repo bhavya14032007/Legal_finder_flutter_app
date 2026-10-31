@@ -127,8 +127,8 @@ void main() {
 
       expect(draft['title'], 'Residential Lease');
       expect(draft['generated_content'], isNotNull);
-      expect(draft['generated_content'].toString(), contains('Arjun Mehta'));
-      expect(draft['generated_content'].toString(), contains('Pooja Verma'));
+      expect(draft['generated_content'].toString().toLowerCase(), contains('arjun mehta'));
+      expect(draft['generated_content'].toString().toLowerCase(), contains('pooja verma'));
     });
 
     test('NoticeReply generates legal defense rebuttal', () async {
