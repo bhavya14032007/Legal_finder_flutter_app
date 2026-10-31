@@ -1,0 +1,211 @@
+# ⚖️ Legal Helper — AI-Powered Mobile Legal Intelligence
+
+> **Official Mobile Application Counterpart of Legal Helper**  
+> **Public GitHub Repository**: [https://github.com/legalhelper/legal-helper-mobile](https://github.com/legalhelper/legal-helper-mobile)
+
+---
+
+## 1. Chosen Vertical: AI Legal Tech & Access to Justice
+
+Legal systems and procedures are notoriously opaque, expensive, and intimidating for individual citizens, tenants, consumers, and small business owners. **Legal Helper** democratizes access to justice by providing an accessible, AI-powered mobile assistant that delivers:
+- Plain-language legal comprehension (demystifying legalese and notice deadlines).
+- Rapid preliminary drafting (NDAs, lease deeds, cease & desist, and demand letters).
+- Structured notice responses and evidence timelines.
+- Pro-bono legal aid eligibility verification and direct public authority links.
+- Pre-consultation preparation kits so citizens enter consultations with clear facts and key questions.
+
+---
+
+## 2. Approach and Architectural Logic
+
+The application is engineered using modern, modular **Feature-First Architecture** with strict layer separation:
+
+```
+lib/
+├── main.dart                          # Application bootstrap & dependency overrides
+├── app.dart                           # MaterialApp.router configuration & theme bindings
+├── core/
+│   ├── config/                        # Supabase & Application runtime environments
+│   │   ├── app_config.dart
+│   │   └── supabase_config.dart
+│   ├── constants/                     # 8px Grid system, Midnight palette, Typography
+│   │   ├── app_colors.dart
+│   │   ├── app_constants.dart
+│   │   ├── app_spacing.dart
+│   │   └── app_typography.dart
+│   ├── routing/                       # GoRouter persistent StatefulShellRoute & navigation
+│   │   ├── app_router.dart
+│   │   └── route_names.dart
+│   ├── services/                      # Supabase SDK, SharedPreferences, Dio HTTP client
+│   │   ├── api_client.dart
+│   │   ├── storage_service.dart
+│   │   └── supabase_service.dart
+│   ├── theme/                         # Light, Dark (Midnight), and ThemeExtensions
+│   │   ├── app_theme.dart
+│   │   └── theme_extensions.dart
+│   ├── utils/                         # Validators, formatters, and helpers
+│   │   ├── date_formatter.dart
+│   │   └── validators.dart
+│   └── widgets/                       # Reusable UI primitives adhering to 8px grid
+│       ├── ai_fab.dart
+│       ├── disclaimer_banner.dart
+│       ├── infinite_ribbon_motif.dart
+│       ├── legal_button.dart
+│       ├── legal_card.dart
+│       ├── legal_empty_state.dart
+│       ├── legal_error_view.dart
+│       ├── legal_loading_indicator.dart
+│       └── legal_text_field.dart
+├── features/
+│   ├── auth/                          # Supabase Auth: Sign In, Sign Up, Password Reset
+│   ├── home/                          # Dashboard, Recent Activity, Search & AI Shortcut
+│   ├── explore/                       # Categorized 10-tool directory (AI, Docs, Safety)
+│   ├── legal_advisor/                 # Conversational AI advisor with citations
+│   ├── legal_research/                # Case law search, precedents, ratios & statutes
+│   ├── document_simplifier/           # Plain-English translation & clause breakdown
+│   ├── drafting/                      # Dynamic legal instrument drafting & editor
+│   ├── notice_reply/                  # Rebuttal formulation for statutory notices
+│   ├── legal_vault/                   # AES-256 encrypted personal document safe
+│   ├── scam_detector/                 # Fraud heuristics, scam threat score & red flags
+│   ├── evidence_timeline/             # Chronological incident and document logger
+│   ├── lawyer_prep/                   # Pre-consultation checklists & strategic questions
+│   ├── legal_aid/                     # Article 39A free legal aid checker & directory
+│   ├── saved/                         # Unified repository for all user outputs
+│   └── profile/                       # Account, English/Hindi localization & Theme
+└── shared/
+    ├── providers/                     # Riverpod state providers (Locale, Theme, Storage)
+    └── widgets/                       # ScaffoldWithNavBar persistent shell
+```
+
+---
+
+## 3. How the Solution Works
+
+### A. Navigation & Shell
+- **Persistent Bottom Navigation**: Exactly four bottom destinations: **Home**, **Explore**, **Saved**, and **Me**.
+- **Floating AI Advisor Action Button (`AiFab`)**: Docks elegantly across main tabs, automatically hides when the virtual keyboard is open, and never obstructs form fields or primary CTAs.
+- **Root Navigator Navigation**: Specialized feature tools push on top of the root navigator with custom back buttons and smooth transitions.
+
+### B. 8-Point Grid System & Design Tokens
+Consistent geometric harmony is enforced throughout the application via `AppSpacing`:
+- `xxs = 4.0` (0.5x)
+- `xs = 8.0` (1.0x - Base Unit)
+- `sm = 12.0` (1.5x)
+- `md = 16.0` (2.0x)
+- `lg = 24.0` (3.0x)
+- `xl = 32.0` (4.0x)
+- `xxl = 40.0` (5.0x)
+- `xxxl = 48.0` (6.0x - Minimum accessible touch target)
+
+### C. Theme & CSS Variables Equivalence
+The mobile app mirrors the web counterpart's CSS custom properties:
+| CSS Custom Property | Dart Color Token | Midnight Dark Value | Light Value |
+|---------------------|------------------|---------------------|-------------|
+| `--bg-midnight` | `AppColors.darkBackground` | `#0B0F17` | `#F8FAFC` |
+| `--surface-card` | `AppColors.darkCard` | `#161F2E` | `#FFFFFF` |
+| `--surface-elevated` | `AppColors.darkCardElevated` | `#1E293B` | `#F1F5F9` |
+| `--surface-border` | `AppColors.darkBorder` | `#26334D` | `#E2E8F0` |
+| `--accent-violet` | `AppColors.accentViolet` | `#6366F1` | `#6366F1` |
+| `--accent-indigo` | `AppColors.accentIndigo` | `#4F46E5` | `#4F46E5` |
+| `--accent-cyan` | `AppColors.accentCyan` | `#06B6D4` | `#06B6D4` |
+
+### D. Accessibility & Reduced Motion
+- All interactive controls enforce a minimum touch target size of 48×48 dp (`AppSpacing.xxxl`).
+- Dynamic animation controllers (including `InfiniteRibbonMotif`) check `context.reducesMotion` (`MediaQuery.maybeOf(context)?.disableAnimations ?? false`) and immediately stop loop animations when reduced motion is preferred by the user.
+- Every custom button and input field contains accessibility `Semantics`.
+
+### E. Internationalization & Dual Language Support
+- Support for **English** and **हिन्दी (Hindi)** interface modes.
+- Instant language toggle under **Me > Preferences** persisted across sessions in `SharedPreferences`.
+
+---
+
+## 4. Feature Coverage Matrix
+
+| Feature Screen | Status | Functionality Details |
+|----------------|--------|-----------------------|
+| **Authentication** | ✅ Operational | Sign In, Sign Up, Password Recovery, Guest fallback, PKCE flow. |
+| **Home Dashboard** | ✅ Operational | User profile banner, global statutory ask field, quick tools, recent library items, disclaimer banner. |
+| **Explore Directory**| ✅ Operational | Categorized into AI ASSISTANCE, DOCUMENTS, and SAFETY & HELP. |
+| **Legal Advisor** | ✅ Operational | Interactive chat, statutory legal citations, prompt chips, save session, new session. |
+| **Legal Research** | ✅ Operational | Case law search, ratio decidendi display, precedent acts breakdown, query history. |
+| **Document Simplifier** | ✅ Operational | File picker (PDF, DOCX, TXT), Plain English / Clause breakdown / Risk modes, Read-aloud simulation, copy, save. |
+| **Drafting Assistant** | ✅ Operational | Configurable NDAs, Leases, Demand Letters, Freelance contracts, Cease & Desist, live editable output editor. |
+| **Notice Reply** | ✅ Operational | Notice upload, recipient & claim details, statutory defense formulation, editable preview. |
+| **Legal Vault** | ✅ Operational | Encrypted document repository, categories (Contracts, Identity, Court, Property), upload & delete. |
+| **Scam Detector** | ✅ Operational | Threat score (0-100), risk indicators, red flags analysis, recommended cyber defense actions. |
+| **Evidence & Timeline** | ✅ Operational | Chronological visual timeline, proof attachment indicators, add & edit entry sheet. |
+| **Lawyer Preparation** | ✅ Operational | Case summary, relief sought, pre-consult checklist, categorized questions by fee/strategy/odds, dossier export. |
+| **Legal Aid** | ✅ Operational | Article 39A eligibility assessment, verified NALSA/DLSA helplines and Tele-Law portal direct access. |
+| **Saved Library** | ✅ Operational | Unified storage for drafts, documents, research and chats with type filter chips and search. |
+| **Profile & Settings** | ✅ Operational | English/Hindi toggle, Midnight/Light/System theme, notifications, privacy modal, GitHub link, sign out. |
+
+---
+
+## 5. Security & Responsible Implementation
+
+1. **Client-Side Key Isolation**: Only the publishable client key is configured in `SupabaseConfig.anonKey`. External AI secret keys and Supabase `service_role` keys are strictly forbidden on the mobile client.
+2. **Offline-Resilient Architecture**: When live Supabase backend credentials are not passed, the application gracefully operates in local fallback mode with pre-seeded data, ensuring zero crashes.
+3. **Mandatory Disclaimer Banners**: Every legal screen prominently displays clear legal disclaimers reminding users that AI outputs are for informational assistance and do not constitute formal attorney-client representation.
+
+---
+
+## 6. Assumptions Made
+
+1. **Backend Integration**: Supabase is used as the primary cloud database and authentication provider. When compile-time environment variables (`SUPABASE_URL` and `SUPABASE_ANON_KEY`) are omitted, the app defaults to resilient local in-memory repositories with realistic legal case data.
+2. **Device File Access**: File picker leverages platform-native Android intent pickers for PDF, DOCX, and image uploads without requiring broad storage manager privileges on Android 13+.
+3. **AI Inference**: The mobile client interacts with statutory reasoning endpoints or edge functions via the repository interfaces, isolating business logic from external API providers.
+
+---
+
+## 7. Setup & Build Instructions
+
+### Prerequisites
+- Flutter SDK 3.24+ (Dart 3.5+)
+- Android Studio / Android SDK with Platform 34
+- Java Development Kit (JDK 17)
+
+### Local Development Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/legalhelper/legal-helper-mobile.git
+   cd legal-helper-mobile
+   ```
+
+2. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
+
+3. Run static analysis:
+   ```bash
+   flutter analyze
+   ```
+
+4. Execute automated tests:
+   ```bash
+   flutter test
+   ```
+
+### Running with Supabase Configuration
+Run the app targeting Android with your Supabase credentials:
+```bash
+flutter run --dart-define=SUPABASE_URL=https://your-project.supabase.co --dart-define=SUPABASE_ANON_KEY=your-anon-publishable-key
+```
+
+### Building Android Release APK / App Bundle
+```bash
+# Build Universal APK
+flutter build apk --release
+
+# Build Google Play App Bundle
+flutter build appbundle --release
+```
+
+---
+
+## 8. Backend Dependencies
+
+- **Database**: PostgreSQL with Supabase Row Level Security (RLS) enabled on `saved_items`, `documents`, and `chat_sessions`.
+- **Auth**: Supabase GoTrue Auth with Email/Password & PKCE.
+- **Storage**: Supabase Storage bucket `legal_vault` with user-isolated RLS folder policies.
