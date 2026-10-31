@@ -24,3 +24,4 @@ class AppConfig {
     'jpeg',
   ];
 }
+

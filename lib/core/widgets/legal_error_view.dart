@@ -76,3 +76,4 @@ class LegalErrorView extends StatelessWidget {
     );
   }
 }
+

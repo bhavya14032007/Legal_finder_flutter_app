@@ -44,3 +44,4 @@ class StorageService {
     return _prefs.clear();
   }
 }
+

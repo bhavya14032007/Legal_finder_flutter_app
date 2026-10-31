@@ -27,3 +27,4 @@ class SupabaseConfig {
       anonKey.isNotEmpty &&
       !anonKey.contains('dummyAnonKey');
 }
+

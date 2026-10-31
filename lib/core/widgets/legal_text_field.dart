@@ -89,3 +89,4 @@ class LegalTextField extends StatelessWidget {
     );
   }
 }
+

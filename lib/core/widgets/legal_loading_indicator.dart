@@ -44,3 +44,4 @@ class LegalLoadingIndicator extends StatelessWidget {
     );
   }
 }
+

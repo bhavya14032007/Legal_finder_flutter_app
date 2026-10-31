@@ -33,3 +33,4 @@ class RouteNames {
   // Settings
   static const String settings = '/settings';
 }
+

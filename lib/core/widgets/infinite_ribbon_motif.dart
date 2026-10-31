@@ -161,3 +161,4 @@ class _RibbonPainter extends CustomPainter {
     return oldDelegate.progress != progress || oldDelegate.opacity != opacity;
   }
 }
+

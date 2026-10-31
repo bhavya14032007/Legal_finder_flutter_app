@@ -287,3 +287,4 @@ class _ScamDetectorScreenState extends State<ScamDetectorScreen> {
     );
   }
 }
+

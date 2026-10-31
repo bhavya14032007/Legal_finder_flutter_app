@@ -84,3 +84,4 @@ class LegalEmptyState extends StatelessWidget {
     );
   }
 }
+

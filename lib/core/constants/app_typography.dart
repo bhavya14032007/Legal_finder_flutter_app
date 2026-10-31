@@ -114,3 +114,4 @@ class AppTypography {
     labelSmall: labelSmall.copyWith(color: AppColors.textTertiaryLight),
   );
 }
+

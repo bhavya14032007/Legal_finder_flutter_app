@@ -27,3 +27,4 @@ class AppConstants {
   static const String prefKeyNotifications = 'pref_notifications_enabled';
   static const String prefKeyFirstLaunch = 'pref_first_launch';
 }
+

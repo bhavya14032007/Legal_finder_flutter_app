@@ -100,3 +100,4 @@ extension ThemeContextExtension on BuildContext {
   /// Check if user has requested reduced motion for accessibility
   bool get reducesMotion => MediaQuery.maybeOf(this)?.disableAnimations ?? false;
 }
+

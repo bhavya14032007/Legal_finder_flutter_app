@@ -178,3 +178,4 @@ class LegalButton extends StatelessWidget {
     );
   }
 }
+

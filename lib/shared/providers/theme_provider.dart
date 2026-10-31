@@ -38,3 +38,4 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
     _storage.setThemeMode(modeStr);
   }
 }
+
