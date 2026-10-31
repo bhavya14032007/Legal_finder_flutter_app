@@ -1,0 +1,25 @@
+# Secrets and environment variables
+.env
+.env.local
+.env.*.local
+
+# Supabase local temporary directories
+.supabase/
+supabase/.temp/
+
+# Operating System & Editor Metadata
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*~
+.vscode/
+.idea/
+
+# Node and package manager artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+

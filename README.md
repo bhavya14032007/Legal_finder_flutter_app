@@ -1,13 +1,13 @@
-# ⚖️ Legal Helper — AI-Powered Mobile Legal Intelligence
+# ⚖️ Legal Helper — Full-Stack AI Legal Tech Platform
 
-> **Official Mobile Application Counterpart of Legal Helper**  
-> **Public GitHub Repository**: [https://github.com/legalhelper/legal-helper-mobile](https://github.com/legalhelper/legal-helper-mobile)
+> **Official Full-Stack Repository: Flutter Android Frontend & Supabase Cloud Backend**  
+> **Public GitHub Repository**: [https://github.com/bhavya14032007/Legal_finder_flutter_app.git](https://github.com/bhavya14032007/Legal_finder_flutter_app.git)
 
 ---
 
 ## 1. Chosen Vertical: AI Legal Tech & Access to Justice
 
-Legal systems and procedures are notoriously opaque, expensive, and intimidating for individual citizens, tenants, consumers, and small business owners. **Legal Helper** democratizes access to justice by providing an accessible, AI-powered mobile assistant that delivers:
+Legal systems and procedures are notoriously opaque, expensive, and intimidating for individual citizens, tenants, consumers, and small business owners. **Legal Helper** democratizes access to justice by providing an accessible, AI-powered mobile assistant backed by a scalable Supabase cloud backend:
 - Plain-language legal comprehension (demystifying legalese and notice deadlines).
 - Rapid preliminary drafting (NDAs, lease deeds, cease & desist, and demand letters).
 - Structured notice responses and evidence timelines.
@@ -16,38 +16,29 @@ Legal systems and procedures are notoriously opaque, expensive, and intimidating
 
 ---
 
-## 2. Approach and Architectural Logic
-
-The application is engineered using modern, modular **Feature-First Architecture** with strict layer separation:
+## 2. Monorepo Structure
 
 ```
-lib/
-├── main.dart                          # Application bootstrap & dependency overrides
-├── app.dart                           # MaterialApp.router configuration & theme bindings
-├── core/
-│   ├── config/                        # Supabase & Application runtime environments
-│   │   ├── app_config.dart
-│   │   └── supabase_config.dart
-│   ├── constants/                     # 8px Grid system, Midnight palette, Typography
-│   │   ├── app_colors.dart
-│   │   ├── app_constants.dart
-│   │   ├── app_spacing.dart
-│   │   └── app_typography.dart
-│   ├── routing/                       # GoRouter persistent StatefulShellRoute & navigation
-│   │   ├── app_router.dart
-│   │   └── route_names.dart
-│   ├── services/                      # Supabase SDK, SharedPreferences, Dio HTTP client
-│   │   ├── api_client.dart
-│   │   ├── storage_service.dart
-│   │   └── supabase_service.dart
-│   ├── theme/                         # Light, Dark (Midnight), and ThemeExtensions
-│   │   ├── app_theme.dart
-│   │   └── theme_extensions.dart
-│   ├── utils/                         # Validators, formatters, and helpers
-│   │   ├── date_formatter.dart
-│   │   └── validators.dart
-│   └── widgets/                       # Reusable UI primitives adhering to 8px grid
-│       ├── ai_fab.dart
+Legal_finder_flutter_app/
+├── README.md                          # Platform overview and architecture guide
+├── .gitignore
+├── frontend/                          # Flutter Android Mobile Application
+│   ├── lib/                           # Feature-First Flutter frontend (Riverpod, GoRouter)
+│   ├── test/                          # Unit and widget test suite (14 passing tests)
+│   ├── android/                       # Android native project files
+│   ├── assets/                        # Design icons and images
+│   ├── pubspec.yaml                   # Flutter dependencies
+│   └── README.md
+└── backend/                           # Supabase Backend & AI Services
+    ├── supabase/
+    │   ├── migrations/                # PostgreSQL schema migrations (001-010) with RLS
+    │   └── functions/                 # Deno TypeScript Edge Functions (AI Advisor, Simplifier, etc.)
+    ├── client/                        # Shared API client SDKs for Flutter & React
+    ├── tests/                         # SQL RLS isolation tests & Deno edge function tests
+    ├── API_CONTRACTS.md               # Complete REST/RPC contract specifications
+    ├── DATABASE_SCHEMA.md             # Entity relationships, tables, and security policies
+    └── DEPLOYMENT_GUIDE.md            # Production deployment walkthrough
+```
 │       ├── disclaimer_banner.dart
 │       ├── infinite_ribbon_motif.dart
 │       ├── legal_button.dart
