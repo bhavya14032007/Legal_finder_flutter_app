@@ -11,13 +11,13 @@ class SupabaseConfig {
   // Project URL
   static const String url = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'https://xyzcompany.supabase.co',
+    defaultValue: 'https://xaubvaailpducqxakkmk.supabase.co',
   );
 
   // Publishable Anon Key (Client safe)
   static const String anonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.dummyAnonKeyLegalHelperClientToken',
+    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhdWJ2YWFpbHBkdWNxeGFra21rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NTQyNjksImV4cCI6MjEwOTAzMDI2OX0.6lfgixyIUA9IluCu9nsELcToo90daGa279dfx7QZFOY',
   );
 
   /// Check whether valid credentials have been configured
