@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -64,6 +65,13 @@ class _LawyerPrepScreenState extends State<LawyerPrepScreen> {
   }
 
   void _copyConsultationDossier() {
+    LegalApiService.generateLawyerPrepDossier(
+      title: 'Consultation Dossier',
+      caseType: 'General Civil / Contractual',
+      factsSummary: _caseSummaryController.text,
+      notes: _reliefSoughtController.text,
+    );
+
     final buffer = StringBuffer();
     buffer.writeln('LAWYER CONSULTATION PREPARATION DOSSIER\n');
     buffer.writeln('CASE SUMMARY:\n${_caseSummaryController.text}\n');

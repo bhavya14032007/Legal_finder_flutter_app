@@ -78,9 +78,10 @@ class SupabaseSavedRepository implements SavedRepository {
         ? item.copyWith(id: const Uuid().v4(), createdAt: DateTime.now())
         : item;
 
-    if (client != null && SupabaseService.isAuthenticated) {
+    if (client != null && SupabaseService.isAuthenticated && SupabaseService.currentUser != null) {
       try {
-        await client.from('saved_items').upsert(itemToSave.toJson());
+        final payload = itemToSave.toSupabaseJson(SupabaseService.currentUser!.id);
+        await client.from('saved_items').upsert(payload);
       } catch (_) {
         // Fallback local
       }

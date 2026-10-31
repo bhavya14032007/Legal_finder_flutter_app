@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -65,7 +66,8 @@ class _DocumentSimplifierScreenState extends ConsumerState<DocumentSimplifierScr
   }
 
   Future<void> _simplifyDocument() async {
-    if (_textController.text.trim().isEmpty) {
+    final text = _textController.text.trim();
+    if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please upload a file or paste legal text to simplify')),
       );
@@ -77,36 +79,64 @@ class _DocumentSimplifierScreenState extends ConsumerState<DocumentSimplifierScr
       _simplifiedResult = null;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1200));
+    try {
+      final analysis = await LegalApiService.simplifyDocument(
+        rawText: text,
+        title: _pickedFileName ?? 'Uploaded Legal Clause',
+        mode: _selectedMode.name,
+      );
 
-    String result;
-    switch (_selectedMode) {
-      case SimplificationMode.plainEnglish:
-        result = 'SUMMARY IN EVERYDAY ENGLISH:\n\n'
-            '1. **What this agreement is**: A temporary 11-month rental permit, not a permanent tenancy.\n'
-            '2. **Your Payment Obligations**: Monthly rent must be paid on or before the 5th of each month. Late fees apply after 5 days.\n'
-            '3. **Security Deposit**: The owner holds 2 months of rent as a security deposit and must return it within 14 days of you moving out after deducting verified repairs.\n'
-            '4. **Ending the Agreement**: Either party can end the deal early by providing 30 days written notice.';
-        break;
-      case SimplificationMode.clauseByClause:
-        result = 'CLAUSE-BY-CLAUSE BREAKDOWN:\n\n'
-            '• **Clause 1 (Grant of License)**: Gives you lawful permission to use the property without creating tenancy ownership rights.\n'
-            '• **Clause 4 (Lock-in Period)**: Neither party may exit during the first 6 months without paying penalty damages equal to remaining months.\n'
-            '• **Clause 8 (Maintenance & Repairs)**: Minor repairs under \$50 are your responsibility; structural damage remains landlord duty.\n'
-            '• **Clause 12 (Dispute Arbitration)**: All disputes must be referred to a sole arbitrator in the designated jurisdiction.';
-        break;
-      case SimplificationMode.riskHighlights:
-        result = 'HIGH-RISK WARNINGS & OBLIGATIONS:\n\n'
-            '⚠️ **Unilateral Eviction Clause**: The document claims the owner can lock premises on 48 hours notice for minor breach. (Legally questionable under standard tenant protection laws).\n'
-            '⚠️ **Forfeiture of Deposit**: Full deposit forfeiture upon early termination is an onerous penalty.\n'
-            '💡 **Recommended Amendment**: Require 15 days written cure notice before any termination or deposit forfeiture.';
-        break;
+      String result;
+      switch (_selectedMode) {
+        case SimplificationMode.plainEnglish:
+          result = analysis['summary_en']?.toString() ??
+              'SUMMARY IN EVERYDAY ENGLISH:\n\n'
+              '1. **What this agreement is**: A temporary 11-month rental permit, not a permanent tenancy.\n'
+              '2. **Your Payment Obligations**: Monthly rent must be paid on or before the 5th of each month. Late fees apply after 5 days.\n'
+              '3. **Security Deposit**: The owner holds 2 months of rent as a security deposit and must return it within 14 days of you moving out after deducting verified repairs.\n'
+              '4. **Ending the Agreement**: Either party can end the deal early by providing 30 days written notice.';
+          break;
+        case SimplificationMode.clauseByClause:
+          if (analysis['important_clauses'] is List) {
+            final clauses = (analysis['important_clauses'] as List).map((c) => '• $c').join('\n\n');
+            result = 'CLAUSE-BY-CLAUSE BREAKDOWN:\n\n$clauses';
+          } else {
+            result = 'CLAUSE-BY-CLAUSE BREAKDOWN:\n\n'
+                '• **Clause 1 (Grant of License)**: Gives you lawful permission to use the property without creating tenancy ownership rights.\n'
+                '• **Clause 4 (Lock-in Period)**: Neither party may exit during the first 6 months without paying penalty damages equal to remaining months.\n'
+                '• **Clause 8 (Maintenance & Repairs)**: Minor repairs under \$50 are your responsibility; structural damage remains landlord duty.\n'
+                '• **Clause 12 (Dispute Arbitration)**: All disputes must be referred to a sole arbitrator in the designated jurisdiction.';
+          }
+          break;
+        case SimplificationMode.riskHighlights:
+          if (analysis['risk_notes'] is List) {
+            final risks = (analysis['risk_notes'] as List).map((r) => '⚠️ $r').join('\n\n');
+            result = 'HIGH-RISK WARNINGS & OBLIGATIONS:\n\n$risks';
+          } else {
+            result = 'HIGH-RISK WARNINGS & OBLIGATIONS:\n\n'
+                '⚠️ **Unilateral Eviction Clause**: The document claims the owner can lock premises on 48 hours notice for minor breach. (Legally questionable under standard tenant protection laws).\n'
+                '⚠️ **Forfeiture of Deposit**: Full deposit forfeiture upon early termination is an onerous penalty.\n'
+                '💡 **Recommended Amendment**: Require 15 days written cure notice before any termination or deposit forfeiture.';
+          }
+          break;
+      }
+
+      if (mounted) {
+        setState(() {
+          _simplifiedResult = result;
+          _isProcessing = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Simplification error: $e')),
+        );
+      }
     }
-
-    setState(() {
-      _simplifiedResult = result;
-      _isProcessing = false;
-    });
   }
 
   void _saveToLibrary() {

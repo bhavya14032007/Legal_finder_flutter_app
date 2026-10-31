@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -21,6 +22,35 @@ class _LegalAidScreenState extends State<LegalAidScreen> {
   bool _annualIncomeUnderThreshold = true;
   bool _evaluated = false;
   bool _isEligible = true;
+  List<Map<String, String>> _dynamicDirectories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDirectory();
+  }
+
+  Future<void> _loadDirectory() async {
+    final list = await LegalApiService.getLegalAidDirectory();
+    if (list.isNotEmpty && mounted) {
+      setState(() {
+        _dynamicDirectories = list.map((item) {
+          if (item is Map) {
+            return {
+              'title': item['title']?.toString() ?? 'Legal Aid Authority',
+              'tollFree': item['toll_free']?.toString() ?? '15100',
+              'scope': item['scope']?.toString() ?? 'State-funded legal counsel and consultation.',
+            };
+          }
+          return {
+            'title': 'Legal Services Authority',
+            'tollFree': '15100',
+            'scope': 'Empanelled legal assistance.',
+          };
+        }).toList();
+      });
+    }
+  }
 
   void _evaluateEligibility() {
     setState(() {
@@ -192,7 +222,7 @@ class _LegalAidScreenState extends State<LegalAidScreen> {
               ),
             ),
             AppSpacing.verticalSpaceSm,
-            ..._legalAidDirectories.map(
+            ...(_dynamicDirectories.isNotEmpty ? _dynamicDirectories : _legalAidDirectories).map(
               (res) => Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                 child: LegalCard(

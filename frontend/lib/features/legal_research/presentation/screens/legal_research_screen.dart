@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_card.dart';
@@ -90,7 +91,30 @@ class _LegalResearchScreenState extends ConsumerState<LegalResearchScreen> {
       }
     });
 
-    await Future.delayed(const Duration(milliseconds: 700));
+    // Call Backend Supabase Edge Function 'legal-research'
+    final backendResult = await LegalApiService.searchLegalResearch(query: q);
+    final List<ResearchResult> fetched = [];
+
+    if (backendResult['precedents'] is List) {
+      for (final p in backendResult['precedents'] as List) {
+        if (p is Map) {
+          fetched.add(
+            ResearchResult(
+              title: p['case_name'] as String? ?? 'Precedent Judgment',
+              citation: p['citation'] as String? ?? 'Citation on Record',
+              court: p['court'] as String? ?? 'Supreme Court / High Court',
+              date: '${p["year"] ?? "2024"}',
+              summary: p['ratio_summary'] as String? ?? 'Judicial ratio on subject matter.',
+              keyRatio: p['ratio_summary'] as String? ?? 'Binding legal principle.',
+              actsApplied: (backendResult['statutes'] as List?)
+                      ?.map((s) => s is Map ? '${s["act"]} ${s["section"]}' : s.toString())
+                      .toList() ??
+                  ['Governing Code'],
+            ),
+          );
+        }
+      }
+    }
 
     final matches = _databaseMock.where((item) =>
       item.title.toLowerCase().contains(q.toLowerCase()) ||
@@ -99,7 +123,7 @@ class _LegalResearchScreenState extends ConsumerState<LegalResearchScreen> {
     ).toList();
 
     setState(() {
-      _results = matches.isNotEmpty ? matches : _databaseMock;
+      _results = fetched.isNotEmpty ? fetched : (matches.isNotEmpty ? matches : _databaseMock);
       _isLoading = false;
     });
   }

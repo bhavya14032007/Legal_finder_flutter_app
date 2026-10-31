@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -60,9 +61,19 @@ class _DraftingScreenState extends ConsumerState<DraftingScreen> {
       _isGenerating = true;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1400));
+    final backendData = await LegalApiService.generateDraft(
+      draftType: _selectedType.name,
+      title: _selectedType.title,
+      inputData: {
+        'party_one': _partyOneController.text,
+        'party_two': _partyTwoController.text,
+        'effective_date': _effectiveDateController.text,
+        'jurisdiction': _jurisdictionController.text,
+        'key_terms': _keyTermsController.text,
+      },
+    );
 
-    final draft = '''${_selectedType.title.toUpperCase()}
+    final generated = backendData['generated_content'] as String? ?? '''${_selectedType.title.toUpperCase()}
 
 This Agreement is entered into on this ${_effectiveDateController.text}, by and between:
 
@@ -95,7 +106,7 @@ Authorized Signatory                         Authorized Signatory
 ''';
 
     setState(() {
-      _generatedDraftController.text = draft;
+      _generatedDraftController.text = generated;
       _hasGenerated = true;
       _isGenerating = false;
     });

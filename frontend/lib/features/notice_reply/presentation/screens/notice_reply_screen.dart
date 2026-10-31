@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -74,9 +75,14 @@ class _NoticeReplyScreenState extends ConsumerState<NoticeReplyScreen> {
       _isAnalyzing = true;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1300));
+    final backendResult = await LegalApiService.generateNoticeReply(
+      noticeText: _noticeTextController.text,
+      userFacts: 'Sender: ${_senderNameController.text}, Disputed amount: ${_claimAmountController.text}',
+      strategy: 'factual_clarification',
+      title: 'Reply to ${_senderNameController.text}',
+    );
 
-    final reply = '''REPLY TO LEGAL NOTICE DATED ${_cureDaysController.text.toUpperCase()}
+    final reply = backendResult['generated_reply'] as String? ?? '''REPLY TO LEGAL NOTICE DATED ${_cureDaysController.text.toUpperCase()}
 
 To,
 Advocate for ${_senderNameController.text}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/widgets/disclaimer_banner.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -63,54 +64,24 @@ class _ScamDetectorScreenState extends State<ScamDetectorScreen> {
       _analysis = null;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1200));
+    final backendScan = await LegalApiService.scanForScam(
+      content: text.isNotEmpty ? text : null,
+      url: url.isNotEmpty ? url : null,
+    );
 
-    final combined = '$text $url'.toLowerCase();
+    final isHighRisk = backendScan.riskScore >= 60;
+    final riskColor = isHighRisk ? AppColors.danger : (backendScan.riskScore >= 30 ? AppColors.warning : AppColors.success);
 
-    ScamAnalysisResult result;
-    if (combined.contains('crypto') ||
-        combined.contains('guaranteed') ||
-        combined.contains('lottery') ||
-        combined.contains('urgent') ||
-        combined.contains('telegram') ||
-        combined.contains('gift card') ||
-        combined.contains('arrest')) {
-      result = const ScamAnalysisResult(
-        riskScore: 92,
-        riskLevel: 'CRITICAL THREAT',
-        riskColor: AppColors.danger,
-        summary:
-            'Extremely high likelihood of advance-fee fraud or digital impersonation. The message demonstrates coercive psychological urgency and non-standard payment channels.',
-        redFlags: [
-          'Unrealistic guaranteed return promises or fabricated arrest threats.',
-          'Demand for immediate payment via cryptocurrency, gift cards, or untraceable UPI IDs.',
-          'Grammatical anomalies, spoofed domain name, or unverified sender identity.',
-          'Absence of verifiable corporate registration or physical regulatory address.',
-        ],
-        recommendedActions: [
-          'Do NOT send any funds, OTPs, or identity documents.',
-          'Block the sender immediately on communication channels.',
-          'File an official cyber fraud complaint at cybercrime.gov.in (National Cyber Crime Portal) or your local cyber cell.',
-          'Preserve full uncropped screenshots of the chat, emails, and transaction requests.',
-        ],
-      );
-    } else {
-      result = const ScamAnalysisResult(
-        riskScore: 28,
-        riskLevel: 'MODERATE CAUTION',
-        riskColor: AppColors.warning,
-        summary:
-            'No immediate obvious malicious signatures detected, but exercise standard contractual and financial due diligence before signing or executing transactions.',
-        redFlags: [
-          'Standard commercial disclaimer language present.',
-          'Verify signatory corporate authorization independently.',
-        ],
-        recommendedActions: [
-          'Verify corporate registration number (CIN / Tax ID) on the official government registry portal.',
-          'Insist on written formal invoices with recognized banking account details.',
-        ],
-      );
-    }
+    final result = ScamAnalysisResult(
+      riskScore: backendScan.riskScore,
+      riskLevel: backendScan.riskLevel,
+      riskColor: riskColor,
+      summary: backendScan.detailedAnalysis.isNotEmpty
+          ? backendScan.detailedAnalysis
+          : 'Detailed AI security inspection completed.',
+      redFlags: backendScan.suspiciousIndicators,
+      recommendedActions: backendScan.recommendedActions,
+    );
 
     setState(() {
       _analysis = result;

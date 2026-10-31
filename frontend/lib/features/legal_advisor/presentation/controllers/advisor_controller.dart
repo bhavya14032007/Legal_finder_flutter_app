@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import '../../../../core/services/legal_api_service.dart';
 import '../../../../features/saved/data/saved_repository.dart';
 import '../../../../features/saved/models/saved_item.dart';
 import '../../models/chat_message.dart';
@@ -92,11 +93,27 @@ class AdvisorController extends StateNotifier<AdvisorState> {
       errorMessage: null,
     );
 
-    // Simulate real AI legal reasoning based on user's query
+    // Call Backend Supabase Edge Function 'legal-advisor' with resilient fallback
     try {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final responseContent = _generateLegalResponse(query);
-      final citations = _extractRelevantCitations(query);
+      final backendResponse = await LegalApiService.sendAdvisorMessage(
+        message: query,
+        sessionId: state.conversationId,
+      );
+
+      final responseContent = backendResponse['message'] as String? ?? _generateLegalResponse(query);
+      final rawStatutes = backendResponse['statutes'];
+      List<String> citations = [];
+      if (rawStatutes is List) {
+        citations = rawStatutes.map((s) {
+          if (s is Map) {
+            return '${s["act"] ?? ""} - ${s["section"] ?? ""}';
+          }
+          return s.toString();
+        }).toList();
+      }
+      if (citations.isEmpty) {
+        citations = _extractRelevantCitations(query);
+      }
 
       final aiMsg = ChatMessage(
         id: const Uuid().v4(),

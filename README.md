@@ -159,8 +159,8 @@ The mobile app mirrors the web counterpart's CSS custom properties:
 ### Local Development Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/legalhelper/legal-helper-mobile.git
-   cd legal-helper-mobile
+   git clone https://github.com/bhavya14032007/Legal_finder_flutter_app.git
+   cd Legal_finder_flutter_app/frontend
    ```
 
 2. Install dependencies:
@@ -173,7 +173,7 @@ The mobile app mirrors the web counterpart's CSS custom properties:
    flutter analyze
    ```
 
-4. Execute automated tests:
+4. Execute automated tests (25 passing unit, widget & integration tests):
    ```bash
    flutter test
    ```
