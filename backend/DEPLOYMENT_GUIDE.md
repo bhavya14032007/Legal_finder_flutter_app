@@ -78,14 +78,15 @@ supabase secrets set AI_PROVIDER=gemini
 supabase secrets set GEMINI_API_KEY="AIzaSy..."
 supabase secrets set GEMINI_MODEL="gemini-1.5-flash"
 
-# If using OpenAI:
-# supabase secrets set AI_PROVIDER=openai
-# supabase secrets set OPENAI_API_KEY="sk-..."
-# supabase secrets set OPENAI_MODEL="gpt-4o-mini"
+# If using Groq (Ultra-fast Llama-3.3-70b):
+# supabase secrets set AI_PROVIDER=groq
+# supabase secrets set GROQ_API_KEY="gsk_..."
+# supabase secrets set GROQ_MODEL="llama-3.3-70b-versatile"
 
-# If using Anthropic:
-# supabase secrets set AI_PROVIDER=anthropic
-# supabase secrets set ANTHROPIC_API_KEY="sk-ant-..."
+# If using xAI Grok:
+# supabase secrets set AI_PROVIDER=grok
+# supabase secrets set GROK_API_KEY="xai-..."
+# supabase secrets set GROK_MODEL="grok-beta"
 ```
 
 Verify secrets are successfully registered:

@@ -61,6 +61,14 @@ export class AIProviderService {
         this.baseUrl = "https://api.groq.com/openai/v1";
         break;
 
+      case "grok":
+      case "xai":
+        this.provider = "openai_compatible";
+        this.apiKey = Deno.env.get("GROK_API_KEY") || Deno.env.get("GROQ_API_KEY") || "";
+        this.model = Deno.env.get("GROK_MODEL") || "grok-beta";
+        this.baseUrl = "https://api.x.ai/v1";
+        break;
+
       case "openrouter":
         this.provider = "openai_compatible";
         this.apiKey = Deno.env.get("OPENROUTER_API_KEY") || "";
