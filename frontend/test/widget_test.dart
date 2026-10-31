@@ -35,7 +35,7 @@ void main() {
     expect(find.text('Me'), findsOneWidget);
 
     // Verify AI Advisor FAB exists
-    expect(find.text('AI Advisor'), findsOneWidget);
+    expect(find.text('+ AI Advisor'), findsOneWidget);
 
     // Verify Quick-Access tools on Home
     expect(find.text('Quick-Access Tools'), findsOneWidget);

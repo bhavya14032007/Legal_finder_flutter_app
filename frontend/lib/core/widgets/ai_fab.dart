@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_typography.dart';
 import '../routing/route_names.dart';
@@ -31,12 +30,13 @@ class AiFab extends StatelessWidget {
       button: true,
       label: 'Open AI Legal Advisor',
       child: Container(
-        height: 48,
+        height: 44,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [
-              AppColors.accentViolet,
-              AppColors.accentPurple,
+              Color(0xFF6366F1),
+              Color(0xFF8B5CF6),
+              Color(0xFFA855F7),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -44,13 +44,14 @@ class AiFab extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
           boxShadow: [
             BoxShadow(
-              color: AppColors.accentViolet.withValues(alpha: isDark ? 0.35 : 0.25),
-              blurRadius: 12,
+              color: const Color(0xFF8B5CF6).withValues(alpha: isDark ? 0.45 : 0.3),
+              blurRadius: 16,
+              spreadRadius: 1,
               offset: const Offset(0, 4),
             ),
           ],
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.2),
+            color: Colors.white.withValues(alpha: 0.25),
             width: 1,
           ),
         ),
@@ -63,24 +64,26 @@ class AiFab extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.xs,
+                horizontal: 18,
+                vertical: 8,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(
                     Icons.auto_awesome,
-                    size: 20,
+                    size: 16,
                     color: Colors.white,
                   ),
                   if (extended) ...[
                     AppSpacing.horizontalSpaceXs,
                     Text(
-                      'AI Advisor',
+                      '+ AI Advisor',
                       style: AppTypography.labelLarge.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                        letterSpacing: 0.2,
                       ),
                     ),
                   ],
