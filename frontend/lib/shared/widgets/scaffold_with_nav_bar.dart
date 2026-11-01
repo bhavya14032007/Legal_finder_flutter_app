@@ -21,27 +21,33 @@ class ScaffoldWithNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentIndex = navigationShell.currentIndex;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF090D18) : const Color(0xFFF8FAFC);
+    final navBg = isDark ? const Color(0xFF080B14) : Colors.white;
+    final navBorder = isDark ? const Color(0xFF1B233D) : const Color(0xFFE2E8F0);
+    final shellBorder = isDark ? const Color(0x336366F1) : const Color(0x1F6366F1);
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0D18),
+        color: bgColor,
         border: Border.all(
-          color: const Color(0x336366F1),
+          color: shellBorder,
           width: 1.5,
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: bgColor,
         body: navigationShell,
         floatingActionButton: const AiFab(extended: true),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: Container(
           height: 68,
-          decoration: const BoxDecoration(
-            color: Color(0xFF080B14),
+          decoration: BoxDecoration(
+            color: navBg,
             border: Border(
               top: BorderSide(
-                color: Color(0xFF1B233D),
+                color: navBorder,
                 width: 1.2,
               ),
             ),
@@ -109,6 +115,12 @@ class _NavBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = index == currentIndex;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final unselectedColor = isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8);
+    final selectedBg = isDark ? const Color(0xFF1B233E) : const Color(0xFFEEF2FF);
+    final selectedBorder = isDark ? const Color(0xFF38436E) : const Color(0xFFC7D2FE);
+    final selectedColor = isDark ? Colors.white : const Color(0xFF4F46E5);
 
     return Expanded(
       child: InkWell(
@@ -125,11 +137,11 @@ class _NavBarItem extends StatelessWidget {
                 vertical: 4,
               ),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF1B233E) : Colors.transparent,
+                color: isSelected ? selectedBg : Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
                 border: isSelected
                     ? Border.all(
-                        color: const Color(0xFF38436E),
+                        color: selectedBorder,
                         width: 1,
                       )
                     : null,
@@ -145,7 +157,7 @@ class _NavBarItem extends StatelessWidget {
               ),
               child: Icon(
                 isSelected ? icon : unselectedIcon,
-                color: isSelected ? Colors.white : const Color(0xFF64748B),
+                color: isSelected ? selectedColor : unselectedColor,
                 size: 22,
               ),
             ),
@@ -153,7 +165,7 @@ class _NavBarItem extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.white : const Color(0xFF64748B),
+                color: isSelected ? selectedColor : unselectedColor,
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),

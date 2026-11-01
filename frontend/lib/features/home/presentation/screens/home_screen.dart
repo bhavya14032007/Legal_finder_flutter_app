@@ -13,6 +13,15 @@ class HomeScreen extends ConsumerWidget {
     final authState = ref.watch(authControllerProvider);
     final savedState = ref.watch(savedControllerProvider);
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF090D18) : const Color(0xFFF8FAFC);
+    final cardBg = isDark ? const Color(0xFF101524) : Colors.white;
+    final cardBorder = isDark ? const Color(0xFF222B45) : const Color(0xFFE2E8F0);
+    final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
+    final textSecondary = isDark ? const Color(0xFF8B95B5) : const Color(0xFF64748B);
+    final heroBg = isDark ? const Color(0xFF101526) : Colors.white;
+    final heroBorder = isDark ? const Color(0xFF283456) : const Color(0xFFE0E7FF);
+
     // Matches target screenshot identity while honoring auth state
     final displayName = authState.userName?.isNotEmpty == true
         ? authState.userName!
@@ -21,7 +30,7 @@ class HomeScreen extends ConsumerWidget {
     final searchController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF090D18),
+      backgroundColor: scaffoldBg,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -37,10 +46,10 @@ class HomeScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'WELCOME BACK,',
                         style: TextStyle(
-                          color: Color(0xFF8B95B5),
+                          color: textSecondary,
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.8,
@@ -49,8 +58,8 @@ class HomeScreen extends ConsumerWidget {
                       const SizedBox(height: 3),
                       Text(
                         displayName,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: textPrimary,
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                           letterSpacing: -0.4,
@@ -141,17 +150,17 @@ class HomeScreen extends ConsumerWidget {
               height: 52,
               padding: const EdgeInsets.only(left: 14, right: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF101524),
+                color: cardBg,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: const Color(0xFF222B45),
+                  color: cardBorder,
                   width: 1.2,
                 ),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Color(0x33000000),
+                    color: isDark ? const Color(0x33000000) : const Color(0x0A000000),
                     blurRadius: 8,
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -166,14 +175,14 @@ class HomeScreen extends ConsumerWidget {
                   Expanded(
                     child: TextField(
                       controller: searchController,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: textPrimary,
                         fontSize: 13.5,
                       ),
-                      decoration: const InputDecoration(
-                        hintText: 'Ask any legal question or search statut',
+                      decoration: InputDecoration(
+                        hintText: 'Ask any legal question or search statutes...',
                         hintStyle: TextStyle(
-                          color: Color(0xFF64748B),
+                          color: textSecondary,
                           fontSize: 13.5,
                           fontWeight: FontWeight.w400,
                         ),
@@ -231,17 +240,17 @@ class HomeScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF101526),
+                color: heroBg,
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: const Color(0xFF283456),
+                  color: heroBorder,
                   width: 1.2,
                 ),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Color(0x44000000),
+                    color: isDark ? const Color(0x44000000) : const Color(0x0E000000),
                     blurRadius: 12,
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -274,13 +283,13 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'AI Legal',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: textPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
                               height: 1.15,
@@ -289,7 +298,7 @@ class HomeScreen extends ConsumerWidget {
                           Text(
                             'Advisor',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: textPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
                               height: 1.15,
@@ -301,17 +310,17 @@ class HomeScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1A213D),
+                          color: isDark ? const Color(0xFF1A213D) : const Color(0xFFEEF2FF),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: const Color(0xFF343F68),
+                            color: isDark ? const Color(0xFF343F68) : const Color(0xFFC7D2FE),
                             width: 1,
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'v3.5',
                           style: TextStyle(
-                            color: Color(0xFFA5B4FC),
+                            color: isDark ? const Color(0xFFA5B4FC) : const Color(0xFF4F46E5),
                             fontSize: 10.5,
                             fontWeight: FontWeight.w600,
                           ),
@@ -366,10 +375,10 @@ class HomeScreen extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
+                  Text(
                     'Get instant statutory clarifications, legal notice analysis, and procedural roadmap guidance.',
                     style: TextStyle(
-                      color: Color(0xFF94A3B8),
+                      color: textSecondary,
                       fontSize: 12,
                       height: 1.45,
                     ),
@@ -387,10 +396,10 @@ class HomeScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Quick-Access Tools',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         letterSpacing: -0.2,
@@ -490,10 +499,10 @@ class HomeScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Recently Saved',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.2,
@@ -528,7 +537,7 @@ class HomeScreen extends ConsumerWidget {
             _SavedItemCard(
               title: savedState.items.length > 1
                   ? savedState.items[1].title
-                  : 'Section 138 NI Act Dishonour Noti...',
+                  : 'Section 138 NI Act Dishonour Notice',
               timeLabel: '3 days ago',
               onTap: () => context.go(RouteNames.saved),
             ),
@@ -540,22 +549,22 @@ class HomeScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFF101526),
+                color: isDark ? const Color(0xFF101526) : const Color(0xFFF1F5F9),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: const Color(0xFF1E2840),
+                  color: isDark ? const Color(0xFF1E2840) : const Color(0xFFE2E8F0),
                   width: 1.1,
                 ),
               ),
-              child: const Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.shield_outlined,
                     color: Color(0xFF60A5FA),
                     size: 19,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text.rich(
                       TextSpan(
@@ -563,7 +572,7 @@ class HomeScreen extends ConsumerWidget {
                           TextSpan(
                             text: 'Important Notice: ',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: textPrimary,
                               fontSize: 11,
                               fontWeight: FontWeight.w700,
                             ),
@@ -572,7 +581,7 @@ class HomeScreen extends ConsumerWidget {
                             text:
                                 'Legal Helper provides AI-assisted legal information, document simplification, and automated drafting for general informational purposes only. It is not an attorney, law firm, or substitute for professional legal advice or formal representation.',
                             style: TextStyle(
-                              color: Color(0xFF94A3B8),
+                              color: textSecondary,
                               fontSize: 11,
                               height: 1.45,
                             ),
@@ -615,20 +624,26 @@ class _ToolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF101526) : Colors.white;
+    final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
+    final textSecondary = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final openBg = isDark ? const Color(0xFF14192E) : const Color(0xFFF1F5F9);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(13),
         decoration: BoxDecoration(
-          color: const Color(0xFF101526),
+          color: cardBg,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: cardBorderColor,
+            color: isDark ? cardBorderColor : const Color(0xFFE2E8F0),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: accentColor.withValues(alpha: 0.08),
+              color: isDark ? accentColor.withValues(alpha: 0.08) : const Color(0x0A000000),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -641,7 +656,7 @@ class _ToolCard extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: iconBgColor,
+                color: isDark ? iconBgColor : accentColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: accentColor.withValues(alpha: 0.5),
@@ -657,8 +672,8 @@ class _ToolCard extends StatelessWidget {
             const Spacer(),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: textPrimary,
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
                 letterSpacing: -0.2,
@@ -669,8 +684,8 @@ class _ToolCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: const TextStyle(
-                color: Color(0xFF94A3B8),
+              style: TextStyle(
+                color: textSecondary,
                 fontSize: 11,
               ),
               maxLines: 1,
@@ -682,7 +697,7 @@ class _ToolCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF14192E),
+                  color: openBg,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: accentColor.withValues(alpha: 0.35),
@@ -719,22 +734,29 @@ class _SavedItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF101526) : Colors.white;
+    final cardBorder = isDark ? const Color(0xFF1E2840) : const Color(0xFFE2E8F0);
+    final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
+    final textSecondary = isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8);
+    final iconBoxBg = isDark ? const Color(0xFF171B33) : const Color(0xFFEEF2FF);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF101526),
+          color: cardBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFF1E2840),
+            color: cardBorder,
             width: 1.1,
           ),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color(0x22000000),
+              color: isDark ? const Color(0x22000000) : const Color(0x08000000),
               blurRadius: 6,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -744,16 +766,16 @@ class _SavedItemCard extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: const Color(0xFF171B33),
+                color: iconBoxBg,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: const Color(0xFF312E81),
+                  color: isDark ? const Color(0xFF312E81) : const Color(0xFFC7D2FE),
                   width: 1,
                 ),
               ),
               child: const Icon(
                 Icons.description_outlined,
-                color: Color(0xFFA5B4FC),
+                color: Color(0xFF6366F1),
                 size: 20,
               ),
             ),
@@ -764,8 +786,8 @@ class _SavedItemCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: textPrimary,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
@@ -775,17 +797,17 @@ class _SavedItemCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     timeLabel,
-                    style: const TextStyle(
-                      color: Color(0xFF64748B),
+                    style: TextStyle(
+                      color: textSecondary,
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right_rounded,
-              color: Color(0xFF64748B),
+              color: textSecondary,
               size: 20,
             ),
           ],

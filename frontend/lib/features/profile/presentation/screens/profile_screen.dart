@@ -216,30 +216,14 @@ class ProfileScreen extends ConsumerWidget {
                         isHindi ? 'थीम मोड' : 'App Theme Mode',
                         style: AppTypography.titleSmall.copyWith(
                           color: context.colors.onSurface,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       AppSpacing.verticalSpaceSm,
-                      SegmentedButton<ThemeMode>(
-                        segments: const [
-                          ButtonSegment(
-                            value: ThemeMode.dark,
-                            label: Text('Midnight Dark'),
-                            icon: Icon(Icons.dark_mode_rounded, size: 16),
-                          ),
-                          ButtonSegment(
-                            value: ThemeMode.light,
-                            label: Text('Light'),
-                            icon: Icon(Icons.light_mode_rounded, size: 16),
-                          ),
-                          ButtonSegment(
-                            value: ThemeMode.system,
-                            label: Text('System'),
-                            icon: Icon(Icons.settings_system_daydream_rounded, size: 16),
-                          ),
-                        ],
-                        selected: {themeMode},
-                        onSelectionChanged: (set) {
-                          ref.read(themeModeProvider.notifier).setThemeMode(set.first);
+                      _ThemeModeSelector(
+                        currentMode: themeMode,
+                        onModeChanged: (mode) {
+                          ref.read(themeModeProvider.notifier).setThemeMode(mode);
                         },
                       ),
                     ],
@@ -403,6 +387,112 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ThemeModeSelector extends StatelessWidget {
+  final ThemeMode currentMode;
+  final ValueChanged<ThemeMode> onModeChanged;
+
+  const _ThemeModeSelector({
+    required this.currentMode,
+    required this.onModeChanged,
+  });
+
+  Widget _buildOption({
+    required BuildContext context,
+    required ThemeMode mode,
+    required String label,
+    required IconData icon,
+  }) {
+    final isSelected = currentMode == mode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => onModeChanged(mode),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 9),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? (isDark ? const Color(0xFF6366F1) : const Color(0xFF4F46E5))
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF6366F1).withValues(alpha: 0.35),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 15,
+                color: isSelected
+                    ? Colors.white
+                    : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isSelected
+                      ? Colors.white
+                      : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final containerBg = isDark ? const Color(0xFF101524) : const Color(0xFFF1F5F9);
+    final containerBorder = isDark ? const Color(0xFF1E2840) : const Color(0xFFE2E8F0);
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: containerBg,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: containerBorder, width: 1.1),
+      ),
+      child: Row(
+        children: [
+          _buildOption(
+            context: context,
+            mode: ThemeMode.dark,
+            label: 'Midnight',
+            icon: Icons.nightlight_round,
+          ),
+          _buildOption(
+            context: context,
+            mode: ThemeMode.light,
+            label: 'Light',
+            icon: Icons.wb_sunny_rounded,
+          ),
+          _buildOption(
+            context: context,
+            mode: ThemeMode.system,
+            label: 'System',
+            icon: Icons.devices_rounded,
+          ),
+        ],
       ),
     );
   }

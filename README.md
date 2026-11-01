@@ -199,4 +199,39 @@ flutter build appbundle --release
 
 - **Database**: PostgreSQL with Supabase Row Level Security (RLS) enabled on `saved_items`, `documents`, and `chat_sessions`.
 - **Auth**: Supabase GoTrue Auth with Email/Password & PKCE.
-- **Storage**: Supabase Storage bucket `legal_vault` with user-isolated RLS folder policies.
+---
+
+## 9. Recent UI Redesigns & Theme Mode Architecture
+
+### A. Notice Reply Helper UI Redesign
+- **Visual Reference Compliance**: Replaced the legacy input form with the modern high-conversion UI matching the production specification.
+- **Header**: Features circular back button `<` with subtle border, bold title & subtitle, and an `Instant Legal Assistant` green status badge pill.
+- **Security Card**: High-contrast "Safe & Confidential" card with lock icon explaining algorithmic claim isolation and response deadline calculation.
+- **Document Upload Card**: Implemented custom dashed border container (`_DashedBorderPainter`), circular purple upload CTA, file extraction indicator, and support for PDFs, images, DOCX, and plain text.
+- **Notice Summary & Goals**: Integrated section with "Voice Dictate" trigger, multiline context field, and 3 statutory goal chips: *Check Limitation Period*, *Request Settlement*, and *Deny Allegations*.
+- **Parties & Claims**: Responsive dual inputs for sender organization and formatted amount claimed (`$ 4,500.00`).
+- **Primary Rebuttal CTA**: Purple-to-blue gradient button with reply icon and statutory export disclaimer.
+
+### B. Drafting Assistant UI Redesign
+- **Conversational Document Generation**: Transformed static form inputs into an AI-guided conversational experience matching the reference design.
+- **Header & Progress**: Centered title with real-time green `● AI Assistant Online` pulse indicator, circular info action `ⓘ`, dynamic multi-step indicator (`✓ Step 3 of 4: Details & Terms`), remaining time estimate (`~1 min remaining`), and centered `TODAY • INSTANT LEGAL DRAFTING` pill.
+- **Message Bubbles**: Left-aligned AI messages with purple sparkle avatars (`Icons.auto_awesome_rounded`) and dark neutral bubbles; right-aligned user messages in purple/indigo gradient pills.
+- **Interactive Agreement Chips**: Instant selector pills for Rental Agreement (🏠), Non-Disclosure Agreement (🔒), Freelance Contract (💼), and Payment Demand (📄).
+- **Inline Drafting Progress**: Interactive progress card displaying document icon, percentage badge (`60%`), document type and jurisdiction, and a "Preview" button.
+- **Modal Preview & Editor**: Fullscreen bottom sheet allowing users to view, live-edit monospace text, copy to clipboard, and persist the draft to the Supabase library.
+- **Bottom Fixed Composer**: Contextual `Quick add:` suggestions (`+ 11-Month Term`, `+ 1-Month Deposit`, `+ 15-Day Notice`), attachment action, dictation trigger, and purple gradient send button.
+
+### C. Dark / Light Theme Mode Bug Fix
+- **Root Cause**: The root `ScaffoldWithNavBar` container and `HomeScreen` had hardcoded hex colors (`0xFF0A0D18`, `0xFF090D18`), overriding light mode themes. Furthermore, `theme_provider.dart` lacked explicit resolution for `ThemeMode.system`.
+- **Solution**:
+  - Bound all scaffold, navbar, cards, typography, and borders to dynamic theme tokens (`context.legalTheme`, `context.colors`, or `isDark` checks).
+  - Extended `ThemeProvider` to properly support `Midnight`, `Light`, and `System` modes with persistent storage across sessions.
+  - Implemented the segmented theme switch on the Profile screen (`Midnight`, `Light`, `System`) with purple glowing active pill indicator matching reference design 3.
+
+---
+
+## 10. Assumptions & Design Logic
+- **Offline & Fallback Safety**: AI generation endpoints gracefully fall back to local rule-based statutory templates if offline or if backend endpoints are unavailable, ensuring continuous user workflows.
+- **Statutory Indian Law Alignment**: Drafts and rebuttals automatically reference applicable Indian statutes (e.g. Section 138 NI Act, Limitation Act 1963, Transfer of Property Act 1882) while remaining customizable.
+- **Supabase Integrity**: All Supabase URLs, anon keys, schema migrations, and RLS policies are strictly preserved.
+
