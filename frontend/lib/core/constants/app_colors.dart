@@ -26,17 +26,17 @@ class AppColors {
   static const Color darkBorderSubtle = Color(0xFF1E283D);
 
   // Light Theme Palette:
-  // CSS: --color-light-base: #F8FAFC
-  static const Color lightBackground = Color(0xFFF8FAFC);
+  // CSS: --color-light-base: #F4F6FF (Apple HIG Polished Palette)
+  static const Color lightBackground = Color(0xFFF4F6FF);
   // CSS: --color-light-surface: #FFFFFF
   static const Color lightSurface = Color(0xFFFFFFFF);
   // CSS: --color-light-card: #FFFFFF
   static const Color lightCard = Color(0xFFFFFFFF);
-  // CSS: --color-light-card-elevated: #F1F5F9
-  static const Color lightCardElevated = Color(0xFFF1F5F9);
-  // CSS: --color-light-border: #E2E8F0
-  static const Color lightBorder = Color(0xFFE2E8F0);
-  static const Color lightBorderSubtle = Color(0xFFEDF2F7);
+  // CSS: --color-light-card-elevated: #F8FAFC
+  static const Color lightCardElevated = Color(0xFFF8FAFC);
+  // CSS: --color-light-border: #E8ECF8
+  static const Color lightBorder = Color(0xFFE8ECF8);
+  static const Color lightBorderSubtle = Color(0xFFF1F5F9);
 
   // Brand / Interactive Accents:
   // CSS: --color-accent-violet: #6366F1

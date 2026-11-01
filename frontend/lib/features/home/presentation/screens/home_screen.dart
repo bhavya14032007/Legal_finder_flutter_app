@@ -15,13 +15,13 @@ class HomeScreen extends ConsumerWidget {
     final savedState = ref.watch(savedControllerProvider);
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final scaffoldBg = isDark ? const Color(0xFF090D18) : const Color(0xFFF8FAFC);
+    final scaffoldBg = isDark ? const Color(0xFF090D18) : const Color(0xFFF4F6FF);
     final cardBg = isDark ? const Color(0xFF101524) : Colors.white;
-    final cardBorder = isDark ? const Color(0xFF222B45) : const Color(0xFFE2E8F0);
+    final cardBorder = isDark ? const Color(0xFF222B45) : const Color(0xFFF1F5F9);
     final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
     final textSecondary = isDark ? const Color(0xFF8B95B5) : const Color(0xFF64748B);
     final heroBg = isDark ? const Color(0xFF101526) : Colors.white;
-    final heroBorder = isDark ? const Color(0xFF283456) : const Color(0xFFE0E7FF);
+    final heroBorder = isDark ? const Color(0xFF283456) : const Color(0xFFEEF2FF);
 
     // Matches target screenshot identity while honoring auth state
     final displayName = authState.userName?.isNotEmpty == true
@@ -152,16 +152,16 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 14, right: 6),
               decoration: BoxDecoration(
                 color: cardBg,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: cardBorder,
+                  color: isDark ? cardBorder : const Color(0xFFE8ECF8),
                   width: 1.2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: isDark ? const Color(0x33000000) : const Color(0x0A000000),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
+                    color: isDark ? const Color(0x33000000) : const Color(0x0C4F46E5),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -169,8 +169,8 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   const Icon(
                     Icons.search_rounded,
-                    color: Color(0xFF818CF8),
-                    size: 20,
+                    color: Color(0xFF94A3B8),
+                    size: 21,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -210,18 +210,18 @@ class HomeScreen extends ConsumerWidget {
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
+                            Color(0xFF7C3AED),
                             Color(0xFF6366F1),
-                            Color(0xFF8B5CF6),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(14),
                         boxShadow: const [
                           BoxShadow(
-                            color: Color(0x666366F1),
-                            blurRadius: 8,
-                            offset: Offset(0, 2),
+                            color: Color(0x557C3AED),
+                            blurRadius: 10,
+                            offset: Offset(0, 3),
                           ),
                         ],
                       ),
@@ -241,19 +241,19 @@ class HomeScreen extends ConsumerWidget {
             // 3. HERO BANNER: AI LEGAL ADVISOR (v3.5)
             // =================================================================
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 color: heroBg,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(22),
                 border: Border.all(
                   color: heroBorder,
                   width: 1.2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: isDark ? const Color(0x44000000) : const Color(0x0E000000),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    color: isDark ? const Color(0x44000000) : const Color(0x0C4F46E5),
+                    blurRadius: 20,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -261,84 +261,82 @@ class HomeScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: 38,
-                        height: 38,
+                        width: 44,
+                        height: 44,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF141C33),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFF0284C7).withValues(alpha: 0.5),
-                            width: 1.2,
-                          ),
-                          boxShadow: [
+                          color: const Color(0xFF0F172A),
+                          borderRadius: BorderRadius.circular(13),
+                          boxShadow: const [
                             BoxShadow(
-                              color: const Color(0xFF0284C7).withValues(alpha: 0.2),
+                              color: Color(0x220F172A),
                               blurRadius: 8,
+                              offset: Offset(0, 2),
                             ),
                           ],
                         ),
                         child: const Icon(
                           Icons.auto_awesome,
                           color: Color(0xFF38BDF8),
-                          size: 18,
+                          size: 20,
                         ),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            ref.isHindi ? 'कानूनी एआई' : 'AI Legal',
-                            style: TextStyle(
-                              color: textPrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              height: 1.15,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                ref.isHindi ? 'कानूनी एआई' : 'AI Legal',
+                                style: TextStyle(
+                                  color: textPrimary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.15,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                                decoration: BoxDecoration(
+                                  color: isDark ? const Color(0xFF2E1065) : const Color(0xFFF3E8FF),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  'v3.5',
+                                  style: TextStyle(
+                                    color: isDark ? const Color(0xFFD8B4FE) : const Color(0xFF7C3AED),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Text(
                             ref.isHindi ? 'सलाहकार' : 'Advisor',
                             style: TextStyle(
                               color: textPrimary,
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.w800,
                               height: 1.15,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1A213D) : const Color(0xFFEEF2FF),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: isDark ? const Color(0xFF343F68) : const Color(0xFFC7D2FE),
-                            width: 1,
-                          ),
-                        ),
-                        child: Text(
-                          'v3.5',
-                          style: TextStyle(
-                            color: isDark ? const Color(0xFFA5B4FC) : const Color(0xFF4F46E5),
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
                       const Spacer(),
                       GestureDetector(
                         onTap: () => context.push(RouteNames.legalAdvisor),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               colors: [
+                                Color(0xFF7C3AED),
                                 Color(0xFF6366F1),
-                                Color(0xFF8B5CF6),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -346,9 +344,9 @@ class HomeScreen extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: const [
                               BoxShadow(
-                                color: Color(0x666366F1),
+                                color: Color(0x557C3AED),
                                 blurRadius: 10,
-                                offset: Offset(0, 2),
+                                offset: Offset(0, 3),
                               ),
                             ],
                           ),
@@ -356,13 +354,11 @@ class HomeScreen extends ConsumerWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                ref.isHindi ? 'परामर्श\nशुरू करें' : 'Start\nConsult',
-                                textAlign: TextAlign.center,
+                                ref.isHindi ? 'परामर्श शुरू करें' : 'Start Consult',
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 11,
+                                  fontSize: 11.5,
                                   fontWeight: FontWeight.w700,
-                                  height: 1.1,
                                 ),
                               ),
                               const SizedBox(width: 4),
@@ -377,7 +373,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   Text(
                     ref.isHindi
                         ? 'कानूनी धाराओं के आधार पर त्वरित वैधानिक मार्गदर्शन, नोटिस विश्लेषण और कार्ययोजना पाएं।'
@@ -452,17 +448,19 @@ class HomeScreen extends ConsumerWidget {
               physics: const NeverScrollableScrollPhysics(),
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              childAspectRatio: 1.15,
+              childAspectRatio: 1.05,
               children: [
                 _ToolCard(
                   title: ref.isHindi ? 'सरलीकरण' : 'Simplifier',
                   subtitle: ref.isHindi ? 'सरल भाषा में समझें' : 'Plain language clauses',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.menu_book_outlined,
-                  accentColor: const Color(0xFF06B6D4),
-                  openTextColor: const Color(0xFF38BDF8),
-                  cardBorderColor: const Color(0xFF0369A1).withValues(alpha: 0.45),
-                  iconBgColor: const Color(0xFF0369A1).withValues(alpha: 0.2),
+                  accentColor: const Color(0xFF0D9488),
+                  openTextColor: const Color(0xFF0D9488),
+                  pillBgColor: const Color(0xFFF0FDFA),
+                  pillBorderColor: const Color(0xFFCCFBF1),
+                  cardBorderColor: const Color(0xFF0D9488).withValues(alpha: 0.3),
+                  iconBgColor: const Color(0xFFF0FDFA),
                   onTap: () => context.push(RouteNames.documentSimplifier),
                 ),
                 _ToolCard(
@@ -470,10 +468,12 @@ class HomeScreen extends ConsumerWidget {
                   subtitle: ref.isHindi ? 'अनुबंध व पत्र' : 'Agreements & notices',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.edit_outlined,
-                  accentColor: const Color(0xFFA855F7),
-                  openTextColor: const Color(0xFFC084FC),
-                  cardBorderColor: const Color(0xFF7C3AED).withValues(alpha: 0.45),
-                  iconBgColor: const Color(0xFF7C3AED).withValues(alpha: 0.2),
+                  accentColor: const Color(0xFF7C3AED),
+                  openTextColor: const Color(0xFF7C3AED),
+                  pillBgColor: const Color(0xFFFAF5FF),
+                  pillBorderColor: const Color(0xFFF3E8FF),
+                  cardBorderColor: const Color(0xFF7C3AED).withValues(alpha: 0.3),
+                  iconBgColor: const Color(0xFFFAF5FF),
                   onTap: () => context.push(RouteNames.drafting),
                 ),
                 _ToolCard(
@@ -481,10 +481,12 @@ class HomeScreen extends ConsumerWidget {
                   subtitle: ref.isHindi ? 'बचाव रणनीति' : 'Rebuttal generator',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.reply_rounded,
-                  accentColor: const Color(0xFF38BDF8),
-                  openTextColor: const Color(0xFF60A5FA),
-                  cardBorderColor: const Color(0xFF2563EB).withValues(alpha: 0.45),
-                  iconBgColor: const Color(0xFF2563EB).withValues(alpha: 0.2),
+                  accentColor: const Color(0xFF0284C7),
+                  openTextColor: const Color(0xFF0284C7),
+                  pillBgColor: const Color(0xFFF0F9FF),
+                  pillBorderColor: const Color(0xFFE0F2FE),
+                  cardBorderColor: const Color(0xFF0284C7).withValues(alpha: 0.3),
+                  iconBgColor: const Color(0xFFF0F9FF),
                   onTap: () => context.push(RouteNames.noticeReply),
                 ),
                 _ToolCard(
@@ -492,10 +494,12 @@ class HomeScreen extends ConsumerWidget {
                   subtitle: ref.isHindi ? 'खतरा एवं रिस्क स्कोर' : 'Risk & threat score',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.shield_outlined,
-                  accentColor: const Color(0xFFF43F5E),
-                  openTextColor: const Color(0xFFFB7185),
-                  cardBorderColor: const Color(0xFFE11D48).withValues(alpha: 0.5),
-                  iconBgColor: const Color(0xFFE11D48).withValues(alpha: 0.2),
+                  accentColor: const Color(0xFFE11D48),
+                  openTextColor: const Color(0xFFE11D48),
+                  pillBgColor: const Color(0xFFFFF1F2),
+                  pillBorderColor: const Color(0xFFFFE4E6),
+                  cardBorderColor: const Color(0xFFE11D48).withValues(alpha: 0.3),
+                  iconBgColor: const Color(0xFFFFF1F2),
                   onTap: () => context.push(RouteNames.scamDetector),
                 ),
               ],
@@ -560,10 +564,10 @@ class HomeScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF101526) : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(14),
+                color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF0F9FF),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isDark ? const Color(0xFF1E2840) : const Color(0xFFE2E8F0),
+                  color: isDark ? const Color(0xFF1E293B) : const Color(0xFFBAE6FD),
                   width: 1.1,
                 ),
               ),
@@ -571,8 +575,8 @@ class HomeScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(
-                    Icons.shield_outlined,
-                    color: Color(0xFF60A5FA),
+                    Icons.info_outline_rounded,
+                    color: Color(0xFF0284C7),
                     size: 19,
                   ),
                   const SizedBox(width: 10),
@@ -591,7 +595,7 @@ class HomeScreen extends ConsumerWidget {
                           TextSpan(
                             text: ref.isHindi
                                 ? 'लीगल हेल्पर केवल सामान्य सूचनात्मक उद्देश्यों के लिए एआई-सहायता प्राप्त कानूनी जानकारी, दस्तावेज़ सरलीकरण और स्वचालित प्रारूपण प्रदान करता है। यह कोई वकील, कानूनी फर्म या पेशेवर कानूनी सलाह का विकल्प नहीं है।'
-                                : 'Legal Helper provides AI-assisted legal information, document simplification, and automated drafting for general informational purposes only. It is not an attorney, law firm, or substitute for professional legal advice or formal representation.',
+                                : 'Legal Helper provides AI-assisted legal information, document simplification, and automated drafting for reference purposes only. It is not an attorney, law firm, or substitute for professional legal advice or formal representation.',
                             style: TextStyle(
                               color: textSecondary,
                               fontSize: 11,
@@ -620,6 +624,8 @@ class _ToolCard extends StatelessWidget {
   final IconData icon;
   final Color accentColor;
   final Color openTextColor;
+  final Color pillBgColor;
+  final Color pillBorderColor;
   final Color cardBorderColor;
   final Color iconBgColor;
   final VoidCallback onTap;
@@ -631,6 +637,8 @@ class _ToolCard extends StatelessWidget {
     required this.icon,
     required this.accentColor,
     required this.openTextColor,
+    required this.pillBgColor,
+    required this.pillBorderColor,
     required this.cardBorderColor,
     required this.iconBgColor,
     required this.onTap,
@@ -642,24 +650,23 @@ class _ToolCard extends StatelessWidget {
     final cardBg = isDark ? const Color(0xFF101526) : Colors.white;
     final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
     final textSecondary = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
-    final openBg = isDark ? const Color(0xFF14192E) : const Color(0xFFF1F5F9);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(13),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: cardBg,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: isDark ? cardBorderColor : const Color(0xFFE2E8F0),
+            color: isDark ? cardBorderColor : const Color(0xFFF1F5F9),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: isDark ? accentColor.withValues(alpha: 0.08) : const Color(0x0A000000),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              color: isDark ? accentColor.withValues(alpha: 0.08) : const Color(0x0C4F46E5),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -667,20 +674,20 @@ class _ToolCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 36,
-              height: 36,
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
-                color: isDark ? iconBgColor : accentColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
+                color: isDark ? accentColor.withValues(alpha: 0.15) : iconBgColor,
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: accentColor.withValues(alpha: 0.5),
+                  color: isDark ? accentColor.withValues(alpha: 0.4) : pillBorderColor,
                   width: 1,
                 ),
               ),
               child: Icon(
                 icon,
                 color: accentColor,
-                size: 19,
+                size: 20,
               ),
             ),
             const Spacer(),
@@ -688,7 +695,7 @@ class _ToolCard extends StatelessWidget {
               title,
               style: TextStyle(
                 color: textPrimary,
-                fontSize: 15,
+                fontSize: 15.5,
                 fontWeight: FontWeight.w800,
                 letterSpacing: -0.2,
               ),
@@ -705,26 +712,25 @@ class _ToolCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
-                decoration: BoxDecoration(
-                  color: openBg,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: accentColor.withValues(alpha: 0.35),
-                    width: 1,
-                  ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              height: 32,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isDark ? accentColor.withValues(alpha: 0.15) : pillBgColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isDark ? accentColor.withValues(alpha: 0.35) : pillBorderColor,
+                  width: 1,
                 ),
-                child: Text(
-                  openLabel,
-                  style: TextStyle(
-                    color: openTextColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                  ),
+              ),
+              child: Text(
+                openLabel,
+                style: TextStyle(
+                  color: isDark ? openTextColor : accentColor,
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -750,27 +756,27 @@ class _SavedItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? const Color(0xFF101526) : Colors.white;
-    final cardBorder = isDark ? const Color(0xFF1E2840) : const Color(0xFFE2E8F0);
+    final cardBorder = isDark ? const Color(0xFF1E2840) : const Color(0xFFF1F5F9);
     final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
     final textSecondary = isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8);
-    final iconBoxBg = isDark ? const Color(0xFF171B33) : const Color(0xFFEEF2FF);
+    final iconBoxBg = isDark ? const Color(0xFF171B33) : const Color(0xFFF3F4FE);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         decoration: BoxDecoration(
           color: cardBg,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: cardBorder,
             width: 1.1,
           ),
           boxShadow: [
             BoxShadow(
-              color: isDark ? const Color(0x22000000) : const Color(0x08000000),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+              color: isDark ? const Color(0x22000000) : const Color(0x084F46E5),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -781,9 +787,9 @@ class _SavedItemCard extends StatelessWidget {
               height: 38,
               decoration: BoxDecoration(
                 color: iconBoxBg,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isDark ? const Color(0xFF312E81) : const Color(0xFFC7D2FE),
+                  color: isDark ? const Color(0xFF312E81) : const Color(0xFFE0E7FF),
                   width: 1,
                 ),
               ),
@@ -802,7 +808,7 @@ class _SavedItemCard extends StatelessWidget {
                     title,
                     style: TextStyle(
                       color: textPrimary,
-                      fontSize: 14,
+                      fontSize: 14.5,
                       fontWeight: FontWeight.w700,
                     ),
                     maxLines: 1,
@@ -821,7 +827,7 @@ class _SavedItemCard extends StatelessWidget {
             ),
             Icon(
               Icons.chevron_right_rounded,
-              color: textSecondary,
+              color: isDark ? const Color(0xFF64748B) : const Color(0xFFCBD5E1),
               size: 20,
             ),
           ],

@@ -36,9 +36,8 @@ class AiFab extends ConsumerWidget {
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [
+              Color(0xFF7C3AED),
               Color(0xFF6366F1),
-              Color(0xFF8B5CF6),
-              Color(0xFFA855F7),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -46,14 +45,14 @@ class AiFab extends ConsumerWidget {
           borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF8B5CF6).withValues(alpha: isDark ? 0.45 : 0.3),
+              color: const Color(0xFF7C3AED).withValues(alpha: isDark ? 0.45 : 0.35),
               blurRadius: 16,
               spreadRadius: 1,
               offset: const Offset(0, 4),
             ),
           ],
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.25),
+            color: Colors.white.withValues(alpha: 0.3),
             width: 1,
           ),
         ),

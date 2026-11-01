@@ -25,9 +25,9 @@ class ScaffoldWithNavBar extends ConsumerWidget {
     final currentIndex = navigationShell.currentIndex;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final bgColor = isDark ? const Color(0xFF090D18) : const Color(0xFFF8FAFC);
+    final bgColor = isDark ? const Color(0xFF090D18) : const Color(0xFFF4F6FF);
     final navBg = isDark ? const Color(0xFF080B14) : Colors.white;
-    final navBorder = isDark ? const Color(0xFF1B233D) : const Color(0xFFE2E8F0);
+    final navBorder = isDark ? const Color(0xFF1B233D) : const Color(0xFFECEFF8);
     final shellBorder = isDark ? const Color(0x336366F1) : const Color(0x1F6366F1);
 
     return Container(
@@ -120,9 +120,9 @@ class _NavBarItem extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final unselectedColor = isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8);
-    final selectedBg = isDark ? const Color(0xFF1B233E) : const Color(0xFFEEF2FF);
-    final selectedBorder = isDark ? const Color(0xFF38436E) : const Color(0xFFC7D2FE);
-    final selectedColor = isDark ? Colors.white : const Color(0xFF4F46E5);
+    final selectedBg = isDark ? const Color(0xFF1B233E) : const Color(0xFFEDE9FE);
+    final selectedBorder = isDark ? const Color(0xFF38436E) : const Color(0xFFDDD6FE);
+    final selectedColor = isDark ? Colors.white : const Color(0xFF7C3AED);
 
     return Expanded(
       child: InkWell(

@@ -74,3 +74,4 @@ void main() {
     expect(find.text('+ AI Advisor'), findsOneWidget);
   });
 }
+
