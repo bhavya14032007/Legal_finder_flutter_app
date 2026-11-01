@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../../../core/theme/theme_extensions.dart';
 import '../../../../core/utils/date_formatter.dart';
 import '../../../../core/widgets/legal_button.dart';
@@ -43,16 +44,16 @@ class SavedScreen extends ConsumerWidget {
     }
   }
 
-  String _labelForType(SavedItemType type) {
+  String _labelForType(SavedItemType type, [bool isHindi = false]) {
     switch (type) {
       case SavedItemType.document:
-        return 'Document';
+        return isHindi ? 'दस्तावेज़' : 'Document';
       case SavedItemType.draft:
-        return 'Draft';
+        return isHindi ? 'प्रारूप' : 'Draft';
       case SavedItemType.research:
-        return 'Research';
+        return isHindi ? 'शोध' : 'Research';
       case SavedItemType.conversation:
-        return 'AI Chat';
+        return isHindi ? 'एआई बातचीत' : 'AI Chat';
     }
   }
 
@@ -157,10 +158,11 @@ class SavedScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(savedControllerProvider);
     final controller = ref.read(savedControllerProvider.notifier);
+    final isHindi = ref.isHindi;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved Library'),
+        title: Text(isHindi ? 'सहेजी गई लाइब्रेरी' : 'Saved Library'),
         centerTitle: false,
       ),
       body: Column(
@@ -168,7 +170,9 @@ class SavedScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.xs),
             child: LegalTextField(
-              hintText: 'Search saved drafts, documents & research...',
+              hintText: isHindi
+                  ? 'सहेजे गए प्रारूप, दस्तावेज़ एवं शोध खोजें...'
+                  : 'Search saved drafts, documents & research...',
               prefixIcon: const Icon(Icons.search, size: 20),
               onChanged: controller.setSearchQuery,
             ),
@@ -180,7 +184,7 @@ class SavedScreen extends ConsumerWidget {
             child: Row(
               children: [
                 FilterChip(
-                  label: const Text('All Items'),
+                  label: Text(isHindi ? 'सभी आइटम' : 'All Items'),
                   selected: state.selectedTypeFilter == null,
                   onSelected: (_) => controller.setFilter(null),
                   selectedColor: AppColors.accentViolet.withValues(alpha: 0.2),
@@ -191,7 +195,7 @@ class SavedScreen extends ConsumerWidget {
                   (type) => Padding(
                     padding: const EdgeInsets.only(right: AppSpacing.xs),
                     child: FilterChip(
-                      label: Text(_labelForType(type)),
+                      label: Text(_labelForType(type, isHindi)),
                       selected: state.selectedTypeFilter == type,
                       onSelected: (_) => controller.setFilter(type),
                       selectedColor: _colorForType(type).withValues(alpha: 0.2),
@@ -205,11 +209,15 @@ class SavedScreen extends ConsumerWidget {
           AppSpacing.verticalSpaceSm,
           Expanded(
             child: state.isLoading
-                ? const LegalLoadingIndicator(message: 'Loading saved items...')
+                ? LegalLoadingIndicator(
+                    message: isHindi ? 'सहेजी गई सामग्री लोड हो रही है...' : 'Loading saved items...',
+                  )
                 : state.items.isEmpty
                     ? LegalEmptyState(
-                        title: 'No Saved Content Yet',
-                        message: 'Saved legal documents, AI analyses, research citations, and drafts will appear here.',
+                        title: isHindi ? 'अभी कोई सामग्री सहेजी नहीं गई है' : 'No Saved Content Yet',
+                        message: isHindi
+                            ? 'सहेजे गए कानूनी दस्तावेज़, एआई विश्लेषण, शोध और प्रारूप यहां दिखाई देंगे।'
+                            : 'Saved legal documents, AI analyses, research citations, and drafts will appear here.',
                         icon: Icons.bookmark_border_rounded,
                       )
                     : ListView.separated(

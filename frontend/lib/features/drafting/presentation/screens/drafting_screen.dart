@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../../../core/services/legal_api_service.dart';
 import '../../../saved/data/saved_repository.dart';
 import '../../../saved/models/saved_item.dart';
@@ -681,7 +682,7 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
           Column(
             children: [
               Text(
-                'Drafting Assistant',
+                ref.isHindi ? 'प्रारूपण सहायक' : 'Drafting Assistant',
                 style: AppTypography.titleMedium.copyWith(
                   color: textPrimary,
                   fontWeight: FontWeight.w700,
@@ -702,7 +703,7 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    'AI Assistant Online',
+                    ref.isHindi ? 'एआई सहायक ऑनलाइन' : 'AI Assistant Online',
                     style: AppTypography.labelSmall.copyWith(
                       color: const Color(0xFF22C55E),
                       fontWeight: FontWeight.w600,
@@ -786,7 +787,9 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  'Step $_currentStep of 4: Details & Terms',
+                  ref.isHindi
+                      ? 'चरण $_currentStep of 4: विवरण एवं शर्तें'
+                      : 'Step $_currentStep of 4: Details & Terms',
                   style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
@@ -799,7 +802,7 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
 
           // Remaining time
           Text(
-            '~1 min remaining',
+            ref.isHindi ? '~1 मिनट शेष' : '~1 min remaining',
             style: TextStyle(
               fontSize: 11.5,
               fontWeight: FontWeight.w500,
@@ -824,7 +827,9 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
         ),
       ),
       child: Text(
-        'TODAY • INSTANT LEGAL DRAFTING',
+        ref.isHindi
+            ? 'आज • त्वरित कानूनी प्रारूपण'
+            : 'TODAY • INSTANT LEGAL DRAFTING',
         style: TextStyle(
           fontSize: 9.5,
           letterSpacing: 0.8,
@@ -1086,8 +1091,8 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
                   children: [
                     Text(
                       _isGenerating
-                          ? 'Generating Draft...'
-                          : 'Drafting in Progress...',
+                          ? (ref.isHindi ? 'प्रारूप तैयार किया जा रहा है...' : 'Generating Draft...')
+                          : (ref.isHindi ? 'प्रारूपण प्रगति पर है...' : 'Drafting in Progress...'),
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -1150,7 +1155,7 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
             ),
             onPressed: _openDraftPreview,
             child: Text(
-              'Preview',
+              ref.isHindi ? 'पूर्वावलोकन' : 'Preview',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -1188,7 +1193,7 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
           Row(
             children: [
               Text(
-                'Quick add:',
+                ref.isHindi ? 'त्वरित जोड़ें:' : 'Quick add:',
                 style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w500,
@@ -1201,11 +1206,23 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _buildQuickTag('+ 11-Month Term', isDark, borderColor),
+                      _buildQuickTag(
+                        ref.isHindi ? '+ 11-महीने की अवधि' : '+ 11-Month Term',
+                        isDark,
+                        borderColor,
+                      ),
                       const SizedBox(width: 6),
-                      _buildQuickTag('+ 1-Month Deposit', isDark, borderColor),
+                      _buildQuickTag(
+                        ref.isHindi ? '+ 1-महीने की जमा' : '+ 1-Month Deposit',
+                        isDark,
+                        borderColor,
+                      ),
                       const SizedBox(width: 6),
-                      _buildQuickTag('+ 15-Day Notice', isDark, borderColor),
+                      _buildQuickTag(
+                        ref.isHindi ? '+ 15-दिन का नोटिस' : '+ 15-Day Notice',
+                        isDark,
+                        borderColor,
+                      ),
                     ],
                   ),
                 ),
@@ -1253,8 +1270,9 @@ FIRST PARTY / LESSOR                        SECOND PARTY / LESSEE
                     textInputAction: TextInputAction.send,
                     onSubmitted: (_) => _handleSendMessage(),
                     decoration: InputDecoration(
-                      hintText:
-                          'Nov 1, 2026, New Delhi with 1 month deposit...',
+                      hintText: ref.isHindi
+                          ? '1 नवंबर 2026, नई दिल्ली, 1 महीने की जमा राशि...'
+                          : 'Nov 1, 2026, New Delhi with 1 month deposit...',
                       hintStyle: TextStyle(
                         fontSize: 12.5,
                         color: isDark

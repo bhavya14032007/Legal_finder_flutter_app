@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../../../core/services/legal_api_service.dart';
 import '../../../../core/widgets/legal_button.dart';
 import '../../../saved/data/saved_repository.dart';
@@ -17,6 +18,18 @@ enum NoticeGoal {
   final String icon;
   final String strategyKey;
   const NoticeGoal(this.label, this.icon, this.strategyKey);
+
+  String getLocalizedLabel(bool isHindi) {
+    if (!isHindi) return label;
+    switch (this) {
+      case NoticeGoal.limitation:
+        return 'मियाद अवधि जांचें';
+      case NoticeGoal.settlement:
+        return 'समझौता अनुरोध';
+      case NoticeGoal.deny:
+        return 'आरोपों का खंडन';
+    }
+  }
 }
 
 class NoticeReplyScreen extends ConsumerStatefulWidget {
@@ -270,9 +283,9 @@ Advocate for Respondent / Client
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Text(
-                        'Instant Legal Assistant',
-                        style: TextStyle(
+                      Text(
+                        ref.isHindi ? 'त्वरित कानूनी सहायक' : 'Instant Legal Assistant',
+                        style: const TextStyle(
                           color: Color(0xFF34D399),
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
@@ -286,7 +299,7 @@ Advocate for Respondent / Client
             const SizedBox(height: 16),
 
             Text(
-              'Notice Reply Helper',
+              ref.isHindi ? 'नोटिस प्रत्युत्तर सहायक' : 'Notice Reply Helper',
               style: TextStyle(
                 color: textPrimary,
                 fontSize: 26,
@@ -296,7 +309,9 @@ Advocate for Respondent / Client
             ),
             const SizedBox(height: 4),
             Text(
-              'Turn confusing legal notices into a clear, calm, and statutory formal response.',
+              ref.isHindi
+                  ? 'जटिल कानूनी नोटिसों को एक स्पष्ट, शांत और वैधानिक उत्तर में बदलें।'
+                  : 'Turn confusing legal notices into a clear, calm, and statutory formal response.',
               style: TextStyle(
                 color: textSecondary,
                 fontSize: 13.5,
@@ -335,7 +350,7 @@ Advocate for Respondent / Client
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Safe & Confidential. ',
+                            text: ref.isHindi ? 'सुरक्षित एवं गोपनीय। ' : 'Safe & Confidential. ',
                             style: TextStyle(
                               color: textPrimary,
                               fontSize: 12,
@@ -343,8 +358,9 @@ Advocate for Respondent / Client
                             ),
                           ),
                           TextSpan(
-                            text:
-                                'AI securely breaks down allegations, calculates response deadlines, and drafts your rebuttal.',
+                            text: ref.isHindi
+                                ? 'एआई सुरक्षित रूप से आरोपों का विश्लेषण करता है, अंतिम तिथि की गणना करता है और उत्तर तैयार करता है।'
+                                : 'AI securely breaks down allegations, calculates response deadlines, and drafts your rebuttal.',
                             style: TextStyle(
                               color: textSecondary,
                               fontSize: 12,
@@ -425,7 +441,7 @@ Advocate for Respondent / Client
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Snap a Photo or Upload PDF',
+                          ref.isHindi ? 'फोटो खींचें या पीडीएफ अपलोड करें' : 'Snap a Photo or Upload PDF',
                           style: TextStyle(
                             color: textPrimary,
                             fontSize: 15.5,
@@ -434,7 +450,9 @@ Advocate for Respondent / Client
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'We will automatically read dates, sender details, and claimed amounts for you!',
+                          ref.isHindi
+                              ? 'हम तारीखें, प्रेषक का विवरण और दावा की गई राशि अपने आप पढ़ लेंगे!'
+                              : 'We will automatically read dates, sender details, and claimed amounts for you!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: textSecondary,
@@ -527,7 +545,7 @@ Advocate for Respondent / Client
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'NOTICE TEXT OR SUMMARY',
+                        ref.isHindi ? 'नोटिस पाठ या सारांश' : 'NOTICE TEXT OR SUMMARY',
                         style: TextStyle(
                           color: isDark ? const Color(0xFF8B95B5) : const Color(0xFF475569),
                           fontSize: 11,
@@ -547,7 +565,9 @@ Advocate for Respondent / Client
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              _isListeningVoice ? 'Listening...' : 'Voice Dictate',
+                              _isListeningVoice
+                                  ? (ref.isHindi ? 'सुन रहे हैं...' : 'Listening...')
+                                  : (ref.isHindi ? 'बोलकर लिखें' : 'Voice Dictate'),
                               style: TextStyle(
                                 color: _isListeningVoice ? const Color(0xFFEF4444) : const Color(0xFF818CF8),
                                 fontSize: 11.5,
@@ -582,8 +602,9 @@ Advocate for Respondent / Client
                         height: 1.45,
                       ),
                       decoration: InputDecoration(
-                        hintText:
-                            'Paste the notice text or summarize what happened in simple words (e.g. loan dispute, credit card notice, tenancy issue)...',
+                        hintText: ref.isHindi
+                            ? 'नोटिस का पाठ चिपकाएं या सरल शब्दों में बताएं कि क्या हुआ (उदा. ऋण विवाद, क्रेडिट कार्ड नोटिस, किरायेदारी समस्या)...'
+                            : 'Paste the notice text or summarize what happened in simple words (e.g. loan dispute, credit card notice, tenancy issue)...',
                         hintStyle: TextStyle(
                           color: textSecondary,
                           fontSize: 12.5,
@@ -602,7 +623,7 @@ Advocate for Respondent / Client
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Goal:',
+                        ref.isHindi ? 'लक्ष्य:' : 'Goal:',
                         style: TextStyle(
                           color: textSecondary,
                           fontSize: 12,
@@ -641,7 +662,7 @@ Advocate for Respondent / Client
                                         Text(goal.icon, style: const TextStyle(fontSize: 13)),
                                         const SizedBox(width: 5),
                                         Text(
-                                          goal.label,
+                                          goal.getLocalizedLabel(ref.isHindi),
                                           style: TextStyle(
                                             color: isSelected
                                                 ? (isDark ? Colors.white : const Color(0xFF4F46E5))
@@ -683,7 +704,7 @@ Advocate for Respondent / Client
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'WHO SENT THE NOTICE?',
+                          ref.isHindi ? 'नोटिस किसने भेजा?' : 'WHO SENT THE NOTICE?',
                           style: TextStyle(
                             color: isDark ? const Color(0xFF8B95B5) : const Color(0xFF475569),
                             fontSize: 10.5,
@@ -746,7 +767,7 @@ Advocate for Respondent / Client
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'AMOUNT CLAIMED',
+                          ref.isHindi ? 'दावा की गई राशि' : 'AMOUNT CLAIMED',
                           style: TextStyle(
                             color: isDark ? const Color(0xFF8B95B5) : const Color(0xFF475569),
                             fontSize: 10.5,
@@ -826,18 +847,20 @@ Advocate for Respondent / Client
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.reply_rounded,
                               color: Colors.white,
                               size: 20,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
-                              'Analyze & Draft Formal Rebuttal',
-                              style: TextStyle(
+                              ref.isHindi
+                                  ? 'विश्लेषण करें और औपचारिक उत्तर बनाएं'
+                                  : 'Analyze & Draft Formal Rebuttal',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w800,
@@ -861,7 +884,9 @@ Advocate for Respondent / Client
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'You will review, customize & export to PDF before sending.',
+                  ref.isHindi
+                      ? 'भेजने से पहले आप समीक्षा, संपादन और पीडीएफ निर्यात कर सकते हैं।'
+                      : 'You will review, customize & export to PDF before sending.',
                   style: TextStyle(
                     color: textSecondary,
                     fontSize: 11.5,
@@ -889,7 +914,7 @@ Advocate for Respondent / Client
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Generated Legal Rebuttal',
+                          ref.isHindi ? 'तैयार किया गया औपचारिक प्रत्युत्तर' : 'Generated Legal Rebuttal',
                           style: TextStyle(
                             color: textPrimary,
                             fontSize: 15,
@@ -904,7 +929,13 @@ Advocate for Respondent / Client
                               onPressed: () {
                                 Clipboard.setData(ClipboardData(text: _rebuttalController.text));
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Rebuttal copied to clipboard')),
+                                  SnackBar(
+                                    content: Text(
+                                      ref.isHindi
+                                          ? 'प्रत्युत्तर क्लिपबोर्ड पर कॉपी हो गया'
+                                          : 'Rebuttal copied to clipboard',
+                                    ),
+                                  ),
                                 );
                               },
                             ),
@@ -936,7 +967,7 @@ Advocate for Respondent / Client
                     ),
                     const SizedBox(height: 12),
                     LegalButton(
-                      text: 'Save Reply to Saved Library',
+                      text: ref.isHindi ? 'लाइब्रेरी में सहेजें' : 'Save Reply to Saved Library',
                       variant: LegalButtonVariant.secondary,
                       icon: Icons.save_alt_rounded,
                       onPressed: _saveReply,

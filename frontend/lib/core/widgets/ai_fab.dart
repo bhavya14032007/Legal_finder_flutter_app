@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_typography.dart';
+import '../localization/app_translations.dart';
 import '../routing/route_names.dart';
 
 /// Floating AI Advisor Action Button
 ///
 /// Provides quick, persistent access to the AI Legal Advisor across main tabs.
 /// Positioned and sized carefully to prevent obscuring bottom nav or keyboards.
-class AiFab extends StatelessWidget {
+class AiFab extends ConsumerWidget {
   final bool extended;
 
   const AiFab({
@@ -17,7 +19,7 @@ class AiFab extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Hide FAB automatically when virtual keyboard is open
     final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 100;
     if (keyboardOpen) {
@@ -78,7 +80,7 @@ class AiFab extends StatelessWidget {
                   if (extended) ...[
                     AppSpacing.horizontalSpaceXs,
                     Text(
-                      '+ AI Advisor',
+                      ref.tr('ai_advisor_fab'),
                       style: AppTypography.labelLarge.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,

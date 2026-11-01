@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../../../core/routing/route_names.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../saved/data/saved_repository.dart';
@@ -47,7 +48,7 @@ class HomeScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'WELCOME BACK,',
+                        ref.isHindi ? 'वापसी पर स्वागत है,' : 'WELCOME BACK,',
                         style: TextStyle(
                           color: textSecondary,
                           fontSize: 11,
@@ -180,7 +181,9 @@ class HomeScreen extends ConsumerWidget {
                         fontSize: 13.5,
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Ask any legal question or search statutes...',
+                        hintText: ref.isHindi
+                            ? 'कानूनी एआई से पूछें (उदा. नोटिस उत्तर, अनुबंध शर्तें)...'
+                            : 'Ask any legal question or search statutes...',
                         hintStyle: TextStyle(
                           color: textSecondary,
                           fontSize: 13.5,
@@ -287,7 +290,7 @@ class HomeScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'AI Legal',
+                            ref.isHindi ? 'कानूनी एआई' : 'AI Legal',
                             style: TextStyle(
                               color: textPrimary,
                               fontSize: 16,
@@ -296,7 +299,7 @@ class HomeScreen extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            'Advisor',
+                            ref.isHindi ? 'सलाहकार' : 'Advisor',
                             style: TextStyle(
                               color: textPrimary,
                               fontSize: 16,
@@ -349,21 +352,21 @@ class HomeScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Start\nConsult',
+                                ref.isHindi ? 'परामर्श\nशुरू करें' : 'Start\nConsult',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
                                   height: 1.1,
                                 ),
                               ),
-                              SizedBox(width: 4),
-                              Icon(
+                              const SizedBox(width: 4),
+                              const Icon(
                                 Icons.chevron_right_rounded,
                                 color: Colors.white,
                                 size: 16,
@@ -376,7 +379,9 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Get instant statutory clarifications, legal notice analysis, and procedural roadmap guidance.',
+                    ref.isHindi
+                        ? 'कानूनी धाराओं के आधार पर त्वरित वैधानिक मार्गदर्शन, नोटिस विश्लेषण और कार्ययोजना पाएं।'
+                        : 'Get instant statutory clarifications, legal notice analysis, and procedural roadmap guidance.',
                     style: TextStyle(
                       color: textSecondary,
                       fontSize: 12,
@@ -397,7 +402,7 @@ class HomeScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Text(
-                      'Quick-Access Tools',
+                      ref.isHindi ? 'त्वरित-पहुंच उपकरण' : 'Quick-Access Tools',
                       style: TextStyle(
                         color: textPrimary,
                         fontSize: 16,
@@ -425,9 +430,9 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () => context.go(RouteNames.explore),
-                  child: const Text(
-                    'View All →',
-                    style: TextStyle(
+                  child: Text(
+                    ref.isHindi ? 'सभी देखें →' : 'View All →',
+                    style: const TextStyle(
                       color: Color(0xFF818CF8),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -450,8 +455,9 @@ class HomeScreen extends ConsumerWidget {
               childAspectRatio: 1.15,
               children: [
                 _ToolCard(
-                  title: 'Simplifier',
-                  subtitle: 'Plain language clauses',
+                  title: ref.isHindi ? 'सरलीकरण' : 'Simplifier',
+                  subtitle: ref.isHindi ? 'सरल भाषा में समझें' : 'Plain language clauses',
+                  openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.menu_book_outlined,
                   accentColor: const Color(0xFF06B6D4),
                   openTextColor: const Color(0xFF38BDF8),
@@ -460,8 +466,9 @@ class HomeScreen extends ConsumerWidget {
                   onTap: () => context.push(RouteNames.documentSimplifier),
                 ),
                 _ToolCard(
-                  title: 'Drafting',
-                  subtitle: 'Agreements & notices',
+                  title: ref.isHindi ? 'प्रारूपण' : 'Drafting',
+                  subtitle: ref.isHindi ? 'अनुबंध व पत्र' : 'Agreements & notices',
+                  openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.edit_outlined,
                   accentColor: const Color(0xFFA855F7),
                   openTextColor: const Color(0xFFC084FC),
@@ -470,8 +477,9 @@ class HomeScreen extends ConsumerWidget {
                   onTap: () => context.push(RouteNames.drafting),
                 ),
                 _ToolCard(
-                  title: 'Notice Reply',
-                  subtitle: 'Rebuttal generator',
+                  title: ref.isHindi ? 'नोटिस उत्तर' : 'Notice Reply',
+                  subtitle: ref.isHindi ? 'बचाव रणनीति' : 'Rebuttal generator',
+                  openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.reply_rounded,
                   accentColor: const Color(0xFF38BDF8),
                   openTextColor: const Color(0xFF60A5FA),
@@ -480,8 +488,9 @@ class HomeScreen extends ConsumerWidget {
                   onTap: () => context.push(RouteNames.noticeReply),
                 ),
                 _ToolCard(
-                  title: 'Scam Detector',
-                  subtitle: 'Risk & threat score',
+                  title: ref.isHindi ? 'धोखाधड़ी शील्ड' : 'Scam Detector',
+                  subtitle: ref.isHindi ? 'खतरा एवं रिस्क स्कोर' : 'Risk & threat score',
+                  openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.shield_outlined,
                   accentColor: const Color(0xFFF43F5E),
                   openTextColor: const Color(0xFFFB7185),
@@ -500,7 +509,7 @@ class HomeScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Recently Saved',
+                  ref.isHindi ? 'हाल ही में सहेजे गए' : 'Recently Saved',
                   style: TextStyle(
                     color: textPrimary,
                     fontSize: 16,
@@ -510,9 +519,9 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () => context.go(RouteNames.saved),
-                  child: const Text(
-                    'Open Library',
-                    style: TextStyle(
+                  child: Text(
+                    ref.isHindi ? 'लाइब्रेरी खोलें' : 'Open Library',
+                    style: const TextStyle(
                       color: Color(0xFF818CF8),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -527,8 +536,8 @@ class HomeScreen extends ConsumerWidget {
             _SavedItemCard(
               title: savedState.items.isNotEmpty
                   ? savedState.items[0].title
-                  : 'Residential Lease Agreement',
-              timeLabel: 'Yesterday',
+                  : (ref.isHindi ? 'आवासीय किराया समझौता' : 'Residential Lease Agreement'),
+              timeLabel: ref.isHindi ? 'कल' : 'Yesterday',
               onTap: () => context.go(RouteNames.saved),
             ),
             const SizedBox(height: 10),
@@ -537,8 +546,10 @@ class HomeScreen extends ConsumerWidget {
             _SavedItemCard(
               title: savedState.items.length > 1
                   ? savedState.items[1].title
-                  : 'Section 138 NI Act Dishonour Notice',
-              timeLabel: '3 days ago',
+                  : (ref.isHindi
+                      ? 'धारा 138 एनआई एक्ट चेक बाउंस नोटिस'
+                      : 'Section 138 NI Act Dishonour Notice'),
+              timeLabel: ref.isHindi ? '3 दिन पहले' : '3 days ago',
               onTap: () => context.go(RouteNames.saved),
             ),
             const SizedBox(height: 18),
@@ -570,7 +581,7 @@ class HomeScreen extends ConsumerWidget {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Important Notice: ',
+                            text: ref.isHindi ? 'महत्वपूर्ण सूचना: ' : 'Important Notice: ',
                             style: TextStyle(
                               color: textPrimary,
                               fontSize: 11,
@@ -578,8 +589,9 @@ class HomeScreen extends ConsumerWidget {
                             ),
                           ),
                           TextSpan(
-                            text:
-                                'Legal Helper provides AI-assisted legal information, document simplification, and automated drafting for general informational purposes only. It is not an attorney, law firm, or substitute for professional legal advice or formal representation.',
+                            text: ref.isHindi
+                                ? 'लीगल हेल्पर केवल सामान्य सूचनात्मक उद्देश्यों के लिए एआई-सहायता प्राप्त कानूनी जानकारी, दस्तावेज़ सरलीकरण और स्वचालित प्रारूपण प्रदान करता है। यह कोई वकील, कानूनी फर्म या पेशेवर कानूनी सलाह का विकल्प नहीं है।'
+                                : 'Legal Helper provides AI-assisted legal information, document simplification, and automated drafting for general informational purposes only. It is not an attorney, law firm, or substitute for professional legal advice or formal representation.',
                             style: TextStyle(
                               color: textSecondary,
                               fontSize: 11,
@@ -604,6 +616,7 @@ class HomeScreen extends ConsumerWidget {
 class _ToolCard extends StatelessWidget {
   final String title;
   final String subtitle;
+  final String openLabel;
   final IconData icon;
   final Color accentColor;
   final Color openTextColor;
@@ -614,6 +627,7 @@ class _ToolCard extends StatelessWidget {
   const _ToolCard({
     required this.title,
     required this.subtitle,
+    this.openLabel = 'Open →',
     required this.icon,
     required this.accentColor,
     required this.openTextColor,
@@ -705,7 +719,7 @@ class _ToolCard extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Open →',
+                  openLabel,
                   style: TextStyle(
                     color: openTextColor,
                     fontSize: 10,

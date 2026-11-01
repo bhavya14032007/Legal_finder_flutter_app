@@ -240,27 +240,24 @@ class ProfileScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isHindi ? 'भाषा (Language)' : 'Interface Language',
+                            isHindi ? 'इंटरफ़ेस भाषा (Language)' : 'Interface Language',
                             style: AppTypography.titleSmall.copyWith(
                               color: context.colors.onSurface,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
+                          const SizedBox(height: 2),
                           Text(
-                            isHindi ? 'वर्तमान: हिन्दी (Hindi)' : 'Current: English (US)',
+                            isHindi ? 'वर्तमान: हिन्दी (भारत)' : 'Current: English (India)',
                             style: AppTypography.bodySmall.copyWith(
                               color: context.colors.onSurface.withValues(alpha: 0.6),
                             ),
                           ),
                         ],
                       ),
-                      SegmentedButton<String>(
-                        segments: const [
-                          ButtonSegment(value: 'en', label: Text('EN')),
-                          ButtonSegment(value: 'hi', label: Text('हिन्दी')),
-                        ],
-                        selected: {locale.languageCode},
-                        onSelectionChanged: (val) {
-                          final code = val.first;
+                      _LanguageSelector(
+                        currentCode: locale.languageCode,
+                        onLanguageChanged: (code) {
                           ref.read(localeProvider.notifier).setLocale(
                                 Locale(code, code == 'hi' ? 'IN' : 'US'),
                               );
@@ -491,6 +488,102 @@ class _ThemeModeSelector extends StatelessWidget {
             mode: ThemeMode.system,
             label: 'System',
             icon: Icons.devices_rounded,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageSelector extends StatelessWidget {
+  final String currentCode;
+  final ValueChanged<String> onLanguageChanged;
+
+  const _LanguageSelector({
+    required this.currentCode,
+    required this.onLanguageChanged,
+  });
+
+  Widget _buildOption({
+    required BuildContext context,
+    required String code,
+    required String label,
+  }) {
+    final isSelected = currentCode == code;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return GestureDetector(
+      onTap: () => onLanguageChanged(code),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? (isDark ? const Color(0xFF6366F1) : const Color(0xFF4F46E5))
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withValues(alpha: 0.35),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isSelected) ...[
+              const Icon(
+                Icons.check_rounded,
+                size: 14,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected
+                    ? Colors.white
+                    : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final containerBg = isDark ? const Color(0xFF101524) : const Color(0xFFF1F5F9);
+    final containerBorder = isDark ? const Color(0xFF1E2840) : const Color(0xFFE2E8F0);
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: containerBg,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: containerBorder, width: 1.1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildOption(
+            context: context,
+            code: 'en',
+            label: 'EN',
+          ),
+          _buildOption(
+            context: context,
+            code: 'hi',
+            label: 'हिंदी',
           ),
         ],
       ),

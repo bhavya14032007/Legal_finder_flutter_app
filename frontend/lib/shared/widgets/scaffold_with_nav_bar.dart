@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/localization/app_translations.dart';
 import '../../core/widgets/ai_fab.dart';
 
 /// Persistent Bottom Navigation Shell with AI Advisor Floating Action Button
-class ScaffoldWithNavBar extends StatelessWidget {
+class ScaffoldWithNavBar extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
   const ScaffoldWithNavBar({
@@ -19,7 +21,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = navigationShell.currentIndex;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -58,7 +60,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
               _NavBarItem(
                 index: 0,
                 currentIndex: currentIndex,
-                label: 'Home',
+                label: ref.tr('nav_home'),
                 icon: Icons.home_rounded,
                 unselectedIcon: Icons.home_outlined,
                 onTap: () => _onItemTapped(0),
@@ -66,7 +68,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
               _NavBarItem(
                 index: 1,
                 currentIndex: currentIndex,
-                label: 'Explore',
+                label: ref.tr('nav_explore'),
                 icon: Icons.explore_rounded,
                 unselectedIcon: Icons.explore_outlined,
                 onTap: () => _onItemTapped(1),
@@ -74,7 +76,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
               _NavBarItem(
                 index: 2,
                 currentIndex: currentIndex,
-                label: 'Saved',
+                label: ref.tr('nav_saved'),
                 icon: Icons.bookmark_rounded,
                 unselectedIcon: Icons.bookmark_border_rounded,
                 onTap: () => _onItemTapped(2),
@@ -82,7 +84,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
               _NavBarItem(
                 index: 3,
                 currentIndex: currentIndex,
-                label: 'Me',
+                label: ref.tr('nav_me'),
                 icon: Icons.person_rounded,
                 unselectedIcon: Icons.person_outline_rounded,
                 onTap: () => _onItemTapped(3),
