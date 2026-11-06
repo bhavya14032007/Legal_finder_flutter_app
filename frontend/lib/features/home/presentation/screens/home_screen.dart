@@ -464,6 +464,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // =================================================================
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -471,18 +472,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ref.isHindi ? 'त्वरित-पहुंच उपकरण' : 'Quick-Access Tools',
                       style: TextStyle(
                         color: textPrimary,
-                        fontSize: 15.5,
+                        fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        letterSpacing: -0.2,
+                        letterSpacing: -0.3,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     Container(
-                      width: 5,
-                      height: 5,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF7955F5),
+                      width: 7,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFA855F7),
                         shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFA855F7).withValues(alpha: 0.8),
+                            blurRadius: 7,
+                            spreadRadius: 2,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -491,73 +499,69 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onTap: () => context.go(RouteNames.explore),
                   child: Text(
                     ref.isHindi ? 'सभी देखें →' : 'View All →',
-                    style: TextStyle(
-                      color: isDark ? const Color(0xFFA5B4FC) : AppColors.primaryAccent,
-                      fontSize: 12,
+                    style: const TextStyle(
+                      color: Color(0xFF60A5FA),
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
             // =================================================================
-            // 5. 2x2 RESPONSIVE GRID: 4 TOOLS (15-20% HEIGHT REDUCTION)
+            // 5. 2x2 RESPONSIVE GRID: 4 TOOLS (WITH SIGNATURE WATERMARKS)
             // =================================================================
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 1.20,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.98,
               children: [
-                // 1. Simplifier (Teal)
+                // 1. Simplifier (Teal - Wave Motif)
                 _ToolCard(
                   title: ref.isHindi ? 'सरलीकरण' : 'Simplifier',
                   subtitle: ref.isHindi ? 'सरल भाषा में समझें' : 'Plain language clauses',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.menu_book_outlined,
                   accentColor: const Color(0xFF0D9488),
-                  cardBg: cardBg,
-                  cardBorder: cardBorder,
+                  watermarkType: _WatermarkType.waves,
                   isDark: isDark,
                   onTap: () => context.push(RouteNames.documentSimplifier),
                 ),
-                // 2. Drafting (Purple)
+                // 2. Drafting (Purple - Isometric Cube Motif)
                 _ToolCard(
                   title: ref.isHindi ? 'प्रारूपण' : 'Drafting',
                   subtitle: ref.isHindi ? 'अनुबंध व पत्र' : 'Agreements & notices',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.edit_outlined,
-                  accentColor: const Color(0xFF7955F5),
-                  cardBg: cardBg,
-                  cardBorder: cardBorder,
+                  accentColor: const Color(0xFFA855F7),
+                  watermarkType: _WatermarkType.cube,
                   isDark: isDark,
                   onTap: () => context.push(RouteNames.drafting),
                 ),
-                // 3. Notice Reply (Blue)
+                // 3. Notice Reply (Blue - Radar Motif)
                 _ToolCard(
                   title: ref.isHindi ? 'नोटिस उत्तर' : 'Notice Reply',
                   subtitle: ref.isHindi ? 'बचाव रणनीति' : 'Rebuttal generator',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.reply_rounded,
-                  accentColor: const Color(0xFF2563EB),
-                  cardBg: cardBg,
-                  cardBorder: cardBorder,
+                  accentColor: const Color(0xFF38BDF8),
+                  watermarkType: _WatermarkType.radar,
                   isDark: isDark,
                   onTap: () => context.push(RouteNames.noticeReply),
                 ),
-                // 4. Scam Detector (Red)
+                // 4. Scam Detector (Red - Shield Motif)
                 _ToolCard(
                   title: ref.isHindi ? 'धोखाधड़ी शील्ड' : 'Scam Detector',
                   subtitle: ref.isHindi ? 'खतरा एवं रिस्क स्कोर' : 'Risk & threat score',
                   openLabel: ref.isHindi ? 'खोलें →' : 'Open →',
                   icon: Icons.shield_outlined,
-                  accentColor: const Color(0xFFEF4444),
-                  cardBg: cardBg,
-                  cardBorder: cardBorder,
+                  accentColor: const Color(0xFFF43F5E),
+                  watermarkType: _WatermarkType.shield,
                   isDark: isDark,
                   onTap: () => context.push(RouteNames.scamDetector),
                 ),
@@ -795,15 +799,118 @@ class _CapabilityChip extends StatelessWidget {
   }
 }
 
-/// Compact, responsive Tool Card (15-20% height reduction)
+enum _WatermarkType { waves, cube, radar, shield }
+
+class _WatermarkPainter extends CustomPainter {
+  final _WatermarkType type;
+  final Color color;
+
+  _WatermarkPainter({required this.type, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strokePaint = Paint()
+      ..color = color.withValues(alpha: 0.18)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.3;
+
+    final dashedPaint = Paint()
+      ..color = color.withValues(alpha: 0.14)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.1;
+
+    switch (type) {
+      case _WatermarkType.waves:
+        final p1 = Path()
+          ..moveTo(size.width * 0.40, size.height)
+          ..quadraticBezierTo(
+            size.width * 0.65, size.height * 0.50,
+            size.width, size.height * 0.60,
+          );
+        canvas.drawPath(p1, strokePaint);
+
+        final p2 = Path()
+          ..moveTo(size.width * 0.20, size.height)
+          ..quadraticBezierTo(
+            size.width * 0.50, size.height * 0.35,
+            size.width, size.height * 0.45,
+          );
+        canvas.drawPath(p2, strokePaint);
+
+        final p3 = Path()
+          ..moveTo(size.width * 0.60, size.height)
+          ..quadraticBezierTo(
+            size.width * 0.85, size.height * 0.65,
+            size.width, size.height * 0.80,
+          );
+        canvas.drawPath(p3, dashedPaint);
+        break;
+
+      case _WatermarkType.cube:
+        final cx = size.width * 0.82;
+        final cy = size.height * 0.68;
+        final s = size.width * 0.28;
+
+        final topPath = Path()
+          ..moveTo(cx, cy - s)
+          ..lineTo(cx + s * 0.86, cy - s * 0.5)
+          ..lineTo(cx, cy)
+          ..lineTo(cx - s * 0.86, cy - s * 0.5)
+          ..close();
+        canvas.drawPath(topPath, strokePaint);
+
+        canvas.drawLine(Offset(cx, cy), Offset(cx, cy + s), strokePaint);
+        canvas.drawLine(Offset(cx + s * 0.86, cy - s * 0.5), Offset(cx + s * 0.86, cy + s * 0.5), strokePaint);
+        canvas.drawLine(Offset(cx - s * 0.86, cy - s * 0.5), Offset(cx - s * 0.86, cy + s * 0.5), strokePaint);
+
+        final bottomPath = Path()
+          ..moveTo(cx - s * 0.86, cy + s * 0.5)
+          ..lineTo(cx, cy + s)
+          ..lineTo(cx + s * 0.86, cy + s * 0.5);
+        canvas.drawPath(bottomPath, strokePaint);
+        break;
+
+      case _WatermarkType.radar:
+        final center = Offset(size.width * 0.85, size.height * 0.85);
+        canvas.drawCircle(center, size.width * 0.22, strokePaint);
+        canvas.drawCircle(center, size.width * 0.38, dashedPaint);
+        canvas.drawCircle(center, size.width * 0.54, strokePaint);
+        break;
+
+      case _WatermarkType.shield:
+        final sx = size.width * 0.80;
+        final sy = size.height * 0.45;
+        final sw = size.width * 0.34;
+        final sh = size.height * 0.52;
+
+        final shieldPath = Path()
+          ..moveTo(sx, sy)
+          ..lineTo(sx + sw * 0.5, sy + sh * 0.15)
+          ..lineTo(sx + sw * 0.5, sy + sh * 0.60)
+          ..quadraticBezierTo(sx + sw * 0.35, sy + sh * 0.90, sx, sy + sh)
+          ..quadraticBezierTo(sx - sw * 0.35, sy + sh * 0.90, sx - sw * 0.5, sy + sh * 0.60)
+          ..lineTo(sx - sw * 0.5, sy + sh * 0.15)
+          ..close();
+        canvas.drawPath(shieldPath, strokePaint);
+
+        canvas.drawLine(Offset(sx, sy + 3), Offset(sx, sy + sh - 4), dashedPaint);
+        break;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _WatermarkPainter oldDelegate) =>
+      oldDelegate.type != type || oldDelegate.color != color;
+}
+
+/// Signature Tool Card matching reference design with decorative watermarks
 class _ToolCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String openLabel;
   final IconData icon;
   final Color accentColor;
-  final Color cardBg;
-  final Color cardBorder;
+  final _WatermarkType watermarkType;
   final bool isDark;
   final VoidCallback onTap;
 
@@ -813,102 +920,130 @@ class _ToolCard extends StatelessWidget {
     required this.openLabel,
     required this.icon,
     required this.accentColor,
-    required this.cardBg,
-    required this.cardBorder,
+    required this.watermarkType,
     required this.isDark,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textPrimary = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
-    final textSecondary = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+    final cardBgColor = isDark ? const Color(0xFF0C1322) : Colors.white;
+    final cardBorderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final textPrimary = isDark ? Colors.white : const Color(0xFF0F172A);
+    final textSecondary = isDark ? const Color(0xFF8B9BB4) : const Color(0xFF64748B);
 
     return _ScaleTap(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
         decoration: BoxDecoration(
-          color: cardBg,
-          borderRadius: BorderRadius.circular(16),
+          color: cardBgColor,
+          borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: isDark ? cardBorder : const Color(0xFFE2E8F0),
-            width: 1.0,
+            color: cardBorderColor,
+            width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: isDark ? const Color(0x1F000000) : const Color(0x06000000),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: isDark ? const Color(0x33000000) : const Color(0x08000000),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: accentColor.withValues(alpha: isDark ? 0.16 : 0.10),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: accentColor.withValues(alpha: isDark ? 0.35 : 0.25),
-                      width: 1.0,
-                    ),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: accentColor,
-                    size: 18,
-                  ),
+            // Decorative background watermark
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _WatermarkPainter(
+                  type: watermarkType,
+                  color: accentColor,
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-                  decoration: BoxDecoration(
-                    color: accentColor.withValues(alpha: isDark ? 0.12 : 0.08),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    openLabel,
-                    style: TextStyle(
-                      color: accentColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.2,
+            // Card Content
+            Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Top Row: Squircle Icon + Open pill
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: accentColor.withValues(alpha: isDark ? 0.16 : 0.10),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: accentColor.withValues(alpha: isDark ? 0.45 : 0.35),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Icon(
+                          icon,
+                          color: accentColor,
+                          size: 19,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 4.5),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF111C2E)
+                              : accentColor.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: accentColor.withValues(alpha: isDark ? 0.4 : 0.25),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Text(
+                          openLabel,
+                          style: TextStyle(
+                            color: isDark ? const Color(0xFFF1F5F9) : accentColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: textSecondary,
-                    fontSize: 10.5,
+                  // Bottom Area: Bold Title + Subtitle
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: textPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.3,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          color: textSecondary,
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
