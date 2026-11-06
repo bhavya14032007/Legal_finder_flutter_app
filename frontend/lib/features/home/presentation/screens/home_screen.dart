@@ -80,20 +80,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Text(
                         ref.isHindi ? 'वापसी पर स्वागत है,' : 'WELCOME BACK,',
                         style: TextStyle(
-                          color: textSecondary,
-                          fontSize: 11,
+                          color: isDark ? const Color(0xFF38BDF8) : const Color(0xFF0284C7),
+                          fontSize: 11.5,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 0.8,
+                          letterSpacing: 0.6,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 3),
                       Text(
                         displayName,
                         style: TextStyle(
                           color: textPrimary,
-                          fontSize: 21,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.3,
+                          fontSize: 23,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.4,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -107,31 +107,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     clipBehavior: Clip.none,
                     children: [
                       Container(
-                        width: 42,
-                        height: 42,
-                        padding: const EdgeInsets.all(2.0),
+                        width: 46,
+                        height: 46,
+                        padding: const EdgeInsets.all(2.2),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const LinearGradient(
                             colors: [
+                              Color(0xFF38BDF8),
                               Color(0xFF7955F5),
-                              Color(0xFF6366F1),
-                              Color(0xFF06B6D4),
+                              Color(0xFFA855F7),
                             ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
                           ),
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0xFF7955F5).withValues(alpha: 0.35),
-                              blurRadius: 8,
+                              blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
                           ],
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: isDark ? AppColors.darkSurface : Colors.white,
+                            color: isDark ? const Color(0xFF090D18) : Colors.white,
                             shape: BoxShape.circle,
                           ),
                           alignment: Alignment.center,
@@ -139,24 +139,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             displayName.isNotEmpty ? displayName[0].toUpperCase() : 'A',
                             style: TextStyle(
                               color: isDark ? Colors.white : AppColors.primaryAccent,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
                       ),
                       Positioned(
-                        right: 0,
-                        bottom: 0,
+                        right: -1,
+                        bottom: -1,
                         child: Container(
-                          width: 11,
-                          height: 11,
+                          width: 14,
+                          height: 14,
                           decoration: BoxDecoration(
-                            color: AppColors.success,
+                            color: const Color(0xFF090D18),
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: scaffoldBg,
-                              width: 2,
+                              color: const Color(0xFF10B981),
+                              width: 1.2,
                             ),
                             boxShadow: const [
                               BoxShadow(
@@ -165,6 +165,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ],
                           ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.gps_fixed_rounded,
+                              size: 8.5,
+                              color: Color(0xFF10B981),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -172,19 +179,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 18),
 
             // =================================================================
             // 2. SEARCH BAR: REFINED INPUT & INTERACTIVE CTA
             // =================================================================
             Container(
-              height: 50,
-              padding: const EdgeInsets.only(left: 14, right: 6),
+              height: 54,
+              padding: const EdgeInsets.only(left: 16, right: 6),
               decoration: BoxDecoration(
-                color: cardBg,
+                color: isDark ? const Color(0xFF0D1527) : cardBg,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: cardBorder,
+                  color: isDark ? const Color(0xFF1E293B) : cardBorder,
                   width: 1.0,
                 ),
                 boxShadow: [
@@ -197,26 +204,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.search_rounded,
-                    color: textSecondary,
-                    size: 20,
+                    color: Color(0xFF64748B),
+                    size: 22,
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: TextField(
                       controller: _searchController,
                       style: TextStyle(
                         color: textPrimary,
-                        fontSize: 13.5,
+                        fontSize: 14,
                       ),
                       decoration: InputDecoration(
                         hintText: ref.isHindi
                             ? 'कानूनी सवाल पूछें या धाराएं खोजें...'
                             : 'Ask any legal question or search statutes...',
-                        hintStyle: TextStyle(
-                          color: textSecondary.withValues(alpha: 0.8),
-                          fontSize: 13.5,
+                        hintStyle: const TextStyle(
+                          color: Color(0xFF64748B),
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
                         border: InputBorder.none,
@@ -229,37 +236,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   _ScaleTap(
                     onTap: () => _handleSearchSubmit(_searchController.text),
                     child: Container(
-                      width: 36,
-                      height: 36,
+                      width: 42,
+                      height: 42,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
-                            Color(0xFF7955F5),
-                            Color(0xFF6366F1),
+                            Color(0xFF4F46E5),
+                            Color(0xFFA855F7),
                           ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(13),
                         boxShadow: const [
                           BoxShadow(
                             color: Color(0x447955F5),
-                            blurRadius: 6,
+                            blurRadius: 8,
                             offset: Offset(0, 2),
                           ),
                         ],
                       ),
                       child: const Icon(
-                        Icons.arrow_forward_rounded,
+                        Icons.north_east_rounded,
                         color: Colors.white,
-                        size: 17,
+                        size: 20,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
             // =================================================================
             // 3. AI LEGAL ADVISOR HERO SECTION: PRIMARY VISUAL ELEMENT
