@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/localization/app_translations.dart';
 import '../../core/widgets/ai_fab.dart';
 
@@ -25,10 +26,10 @@ class ScaffoldWithNavBar extends ConsumerWidget {
     final currentIndex = navigationShell.currentIndex;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final bgColor = isDark ? const Color(0xFF090D18) : const Color(0xFFF4F6FF);
-    final navBg = isDark ? const Color(0xFF080B14) : Colors.white;
-    final navBorder = isDark ? const Color(0xFF1B233D) : const Color(0xFFECEFF8);
-    final shellBorder = isDark ? const Color(0x336366F1) : const Color(0x1F6366F1);
+    final bgColor = isDark ? AppColors.darkBackground : AppColors.lightBackground;
+    final navBg = isDark ? AppColors.darkBackground : Colors.white;
+    final navBorder = isDark ? AppColors.darkBorder : AppColors.lightBorder;
+    final shellBorder = isDark ? const Color(0x337955F5) : const Color(0x1F7955F5);
 
     return Container(
       decoration: BoxDecoration(
@@ -43,53 +44,56 @@ class ScaffoldWithNavBar extends ConsumerWidget {
         body: navigationShell,
         floatingActionButton: const AiFab(extended: true),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        bottomNavigationBar: Container(
-          height: 68,
-          decoration: BoxDecoration(
-            color: navBg,
-            border: Border(
-              top: BorderSide(
-                color: navBorder,
-                width: 1.2,
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: Container(
+            height: 64,
+            decoration: BoxDecoration(
+              color: navBg,
+              border: Border(
+                top: BorderSide(
+                  color: navBorder,
+                  width: 1.0,
+                ),
               ),
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavBarItem(
-                index: 0,
-                currentIndex: currentIndex,
-                label: ref.tr('nav_home'),
-                icon: Icons.home_rounded,
-                unselectedIcon: Icons.home_outlined,
-                onTap: () => _onItemTapped(0),
-              ),
-              _NavBarItem(
-                index: 1,
-                currentIndex: currentIndex,
-                label: ref.tr('nav_explore'),
-                icon: Icons.explore_rounded,
-                unselectedIcon: Icons.explore_outlined,
-                onTap: () => _onItemTapped(1),
-              ),
-              _NavBarItem(
-                index: 2,
-                currentIndex: currentIndex,
-                label: ref.tr('nav_saved'),
-                icon: Icons.bookmark_rounded,
-                unselectedIcon: Icons.bookmark_border_rounded,
-                onTap: () => _onItemTapped(2),
-              ),
-              _NavBarItem(
-                index: 3,
-                currentIndex: currentIndex,
-                label: ref.tr('nav_me'),
-                icon: Icons.person_rounded,
-                unselectedIcon: Icons.person_outline_rounded,
-                onTap: () => _onItemTapped(3),
-              ),
-            ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavBarItem(
+                  index: 0,
+                  currentIndex: currentIndex,
+                  label: ref.tr('nav_home'),
+                  icon: Icons.home_rounded,
+                  unselectedIcon: Icons.home_outlined,
+                  onTap: () => _onItemTapped(0),
+                ),
+                _NavBarItem(
+                  index: 1,
+                  currentIndex: currentIndex,
+                  label: ref.tr('nav_explore'),
+                  icon: Icons.explore_rounded,
+                  unselectedIcon: Icons.explore_outlined,
+                  onTap: () => _onItemTapped(1),
+                ),
+                _NavBarItem(
+                  index: 2,
+                  currentIndex: currentIndex,
+                  label: ref.tr('nav_saved'),
+                  icon: Icons.bookmark_rounded,
+                  unselectedIcon: Icons.bookmark_border_rounded,
+                  onTap: () => _onItemTapped(2),
+                ),
+                _NavBarItem(
+                  index: 3,
+                  currentIndex: currentIndex,
+                  label: ref.tr('nav_me'),
+                  icon: Icons.person_rounded,
+                  unselectedIcon: Icons.person_outline_rounded,
+                  onTap: () => _onItemTapped(3),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -119,10 +123,10 @@ class _NavBarItem extends StatelessWidget {
     final isSelected = index == currentIndex;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final unselectedColor = isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8);
-    final selectedBg = isDark ? const Color(0xFF1B233E) : const Color(0xFFEDE9FE);
-    final selectedBorder = isDark ? const Color(0xFF38436E) : const Color(0xFFDDD6FE);
-    final selectedColor = isDark ? Colors.white : const Color(0xFF7C3AED);
+    final unselectedColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+    final selectedBg = isDark ? const Color(0xFF1E1B4B) : const Color(0xFFEDE9FE);
+    final selectedBorder = isDark ? const Color(0xFF3730A3) : const Color(0xFFDDD6FE);
+    final selectedColor = isDark ? const Color(0xFFF8FAFC) : const Color(0xFF7955F5);
 
     return Expanded(
       child: InkWell(

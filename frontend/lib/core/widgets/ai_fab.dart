@@ -10,7 +10,7 @@ import '../routing/route_names.dart';
 ///
 /// Provides quick, persistent access to the AI Legal Advisor across main tabs.
 /// Positioned and sized carefully to prevent obscuring bottom nav or keyboards.
-class AiFab extends ConsumerWidget {
+class AiFab extends ConsumerStatefulWidget {
   final bool extended;
 
   const AiFab({
@@ -19,7 +19,14 @@ class AiFab extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AiFab> createState() => _AiFabState();
+}
+
+class _AiFabState extends ConsumerState<AiFab> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
     // Hide FAB automatically when virtual keyboard is open
     final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 100;
     if (keyboardOpen) {
@@ -31,64 +38,74 @@ class AiFab extends ConsumerWidget {
     return Semantics(
       button: true,
       label: 'Open AI Legal Advisor',
-      child: Container(
-        height: 44,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xFF7C3AED),
-              Color(0xFF6366F1),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF7C3AED).withValues(alpha: isDark ? 0.45 : 0.35),
-              blurRadius: 16,
-              spreadRadius: 1,
-              offset: const Offset(0, 4),
-            ),
-          ],
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              context.push(RouteNames.legalAdvisor);
-            },
-            borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18,
-                vertical: 8,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.auto_awesome,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                  if (extended) ...[
-                    AppSpacing.horizontalSpaceXs,
-                    Text(
-                      ref.tr('ai_advisor_fab'),
-                      style: AppTypography.labelLarge.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                  ],
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
+        child: AnimatedScale(
+          scale: _isPressed ? 0.94 : 1.0,
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          child: Container(
+            height: 42,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF7955F5),
+                  Color(0xFF6366F1),
                 ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF7955F5).withValues(alpha: isDark ? 0.4 : 0.28),
+                  blurRadius: 14,
+                  spreadRadius: 0.5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.25),
+                width: 1,
+              ),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  context.push(RouteNames.legalAdvisor);
+                },
+                borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.auto_awesome,
+                        size: 15,
+                        color: Colors.white,
+                      ),
+                      if (widget.extended) ...[
+                        AppSpacing.horizontalSpaceXs,
+                        Text(
+                          ref.tr('ai_advisor_fab'),
+                          style: AppTypography.labelLarge.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12.5,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
           ),

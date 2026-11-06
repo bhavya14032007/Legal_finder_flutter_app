@@ -12,37 +12,32 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Dark Theme (Midnight Palette) - Web counterpart:
-  // CSS: --color-midnight-base: #0B0F17
-  static const Color darkBackground = Color(0xFF0B0F17);
-  // CSS: --color-midnight-surface: #121824
-  static const Color darkSurface = Color(0xFF121824);
-  // CSS: --color-surface-card: #161F2E
-  static const Color darkCard = Color(0xFF161F2E);
-  // CSS: --color-surface-elevated: #1E293B
-  static const Color darkCardElevated = Color(0xFF1E293B);
-  // CSS: --color-surface-border: #26334D
+  // Dark Theme (Modern Legal-Tech Palette)
+  // Specified Design Tokens:
+  // Primary background: #080D19
+  static const Color darkBackground = Color(0xFF080D19);
+  // Secondary surface: #151D30
+  static const Color darkSurface = Color(0xFF151D30);
+  // Card background: #111827
+  static const Color darkCard = Color(0xFF111827);
+  static const Color darkCardElevated = Color(0xFF151D30);
+  // Borders: #26334D
   static const Color darkBorder = Color(0xFF26334D);
   static const Color darkBorderSubtle = Color(0xFF1E283D);
 
   // Light Theme Palette:
-  // CSS: --color-light-base: #F4F6FF (Apple HIG Polished Palette)
   static const Color lightBackground = Color(0xFFF4F6FF);
-  // CSS: --color-light-surface: #FFFFFF
   static const Color lightSurface = Color(0xFFFFFFFF);
-  // CSS: --color-light-card: #FFFFFF
   static const Color lightCard = Color(0xFFFFFFFF);
-  // CSS: --color-light-card-elevated: #F8FAFC
   static const Color lightCardElevated = Color(0xFFF8FAFC);
-  // CSS: --color-light-border: #E8ECF8
   static const Color lightBorder = Color(0xFFE8ECF8);
   static const Color lightBorderSubtle = Color(0xFFF1F5F9);
 
   // Brand / Interactive Accents:
-  // CSS: --color-accent-violet: #6366F1
-  static const Color accentViolet = Color(0xFF6366F1);
-  // CSS: --color-accent-indigo: #4F46E5
-  static const Color accentIndigo = Color(0xFF4F46E5);
+  // Primary accent: #7955F5
+  static const Color primaryAccent = Color(0xFF7955F5);
+  static const Color accentViolet = Color(0xFF7955F5);
+  static const Color accentIndigo = Color(0xFF6366F1);
   // CSS: --color-accent-violet-light: #818CF8
   static const Color accentVioletLight = Color(0xFF818CF8);
   // CSS: --color-accent-purple: #A855F7
